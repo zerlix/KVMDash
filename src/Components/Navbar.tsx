@@ -14,8 +14,8 @@ export default function TopMenubar({ open }: TopMenubarProps) {
     <AppBar
       position="fixed"
       sx={{
-        width: `calc(100% - ${open ? drawerWidth : 0}px)`,
-        marginLeft: open ? drawerWidth : 0,
+        width: `calc(100% - ${open ? drawerWidth : 64}px)`,
+        marginLeft: open ? drawerWidth : 64,
         transition: 'width 0.3s, margin-left 0.3s',
       }}
     >

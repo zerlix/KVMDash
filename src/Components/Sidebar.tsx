@@ -17,52 +17,46 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
   return (
     <>
       <Drawer
-        variant="persistent"
+        variant="permanent"
         anchor="left"
         open={open}
         sx={{
-          width: drawerWidth,
+          width: open ? drawerWidth : '64px',
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: drawerWidth,
+            width: open ? drawerWidth : '64px',
             boxSizing: 'border-box',
+            overflowX: 'hidden',
+            transition: 'width 0.3s',
           },
         }}
       >
         <Toolbar />
         <Divider />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '8px' }}>
-          <IconButton onClick={toggleDrawer} sx={{ position: 'absolute', right: '0px', top: '10px' }}>
-            <ChevronLeftIcon />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '8px' }}>
+          <IconButton onClick={toggleDrawer}>
+            {open ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
         </div>
         <List>
           <ListItem key="home" disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
+            <ListItemButton sx={{ justifyContent: open ? 'initial' : 'center' }}>
+              <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Home" />
+              {open && <ListItemText primary="Home" />}
             </ListItemButton>
           </ListItem>
           <ListItem key="settings" disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
+            <ListItemButton sx={{ justifyContent: open ? 'initial' : 'center' }}>
+              <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText primary="Settings" />
+              {open && <ListItemText primary="Settings" />}
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
-      {!open && (
-        <IconButton
-          onClick={toggleDrawer}
-          sx={{ position: 'fixed', top: 72, left: 16, zIndex: 1300 }}
-        >
-          <MenuIcon />
-        </IconButton>
-      )}
     </>
   );
 };

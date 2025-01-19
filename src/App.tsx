@@ -23,7 +23,7 @@ export default function App() {
                 height: '100vh', 
                 overflow: 'auto',
                 marginTop: '64px',
-                width: `calc(100% - ${open ? drawerWidth : 0}px)`,
+                width: `calc(100% - ${open ? drawerWidth : 64}px)`,
                 paddingLeft: '20px', // Konstanter Abstand statt margin
                 transition: 'width 0.3s',
         }}>
