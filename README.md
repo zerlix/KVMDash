@@ -1,35 +1,39 @@
-# Projektbeschreibung: KVMDash
-KVMDash ist eine moderne Webanwendung, die die Verwaltung von Virtual Machines (VMs) und Linux-Containern (LXC) auf Linux-Systemen ermöglicht. Mit einer benutzerfreundlichen Oberfläche erleichtert KVMDash die Administration und Überwachung von Virtualisierungsumgebungen.
+# Material UI - Vite.js in TypeScript example
 
+## How to use
 
-## Features
+Download the example [or clone the repo](https://github.com/mui/material-ui):
 
-### VM- und LXC-Verwaltung
-* Erstellen, Löschen und Konfigurieren von VMs und Containern über die Weboberfläche.
-* Nutzung von Vorlagen für die schnelle und standardisierte Erstellung von VMs und Containern.
+<!-- #default-branch-switch -->
 
-### Systemmonitoring
-* Echtzeitüberwachung von Ressourcen wie CPU, Arbeitsspeicher, Festplattenauslastung und weiteren wichtigen Systemmetriken.
-* Übersichtliche Darstellung der Systemleistung für eine optimale Kontrolle und Fehleranalyse.
-
-
-## Voraussetzung
-Ein Linux-System mit:
-* Installiertem KVM (Kernel-based Virtual Machine).
-* Installiertem libvirt für die Verwaltung von Virtualisierungsressourcen
-
-
-
-Eine detaillierte Anleitung zur Installation von KVM und libvirt unter Debian 12 (Bookworm) finden Sie hier: 
-* [Installation von KVM unter Debian 12 Bookworm](https://themm.curiosum.eu/howto/installation-von-kvm-unter-debian-12-bookworm)
-* [libvirt-howto](https://themm.curiosum.eu/howto/libvirt-howto)
-
-
-Nach erfolgreicher Installation muss User "www-data" der Gruppe libvirt und kvm hinzugefügt werden.
 ```bash
-usermod -aG libvirt,kvm www-data
+curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2 material-ui-master/examples/material-ui-vite-ts
+cd material-ui-vite-ts
 ```
 
-## Ziel
-Das Hauptziel von KVMDash ist es, die Komplexität bei der Administration von Virtualisierungsumgebungen zu verringern. Dabei werden Verwaltungs- und Überwachungsfunktionen bereitgestellt, die gleichzeitig leicht zugänglich und intuitiv bedienbar sind.
+Install it and run:
 
+```bash
+npm install
+npm run dev
+```
+
+or:
+
+<!-- #default-branch-switch -->
+
+[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/material-ui-vite-ts)
+
+[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/mui/material-ui/tree/master/examples/material-ui-vite-ts)
+
+## The idea behind the example
+
+This example uses [Vite.js](https://github.com/vitejs/vite).
+It includes `@mui/material` and its peer dependencies, including [Emotion](https://emotion.sh/docs/introduction), the default style engine in Material UI v6.
+
+## What's next?
+
+<!-- #default-branch-switch -->
+
+You now have a working example project.
+You can head back to the documentation and continue by browsing the [templates](https://mui.com/material-ui/getting-started/templates/) section.
