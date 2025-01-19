@@ -1,38 +1,35 @@
-import * as React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import ProTip from './ProTip';
+import React, { useState } from 'react';
 
-function Copyright() {
-  return (
-    <Typography
-      variant="body2"
-      align="center"
-      sx={{
-        color: 'text.secondary',
-      }}
-    >
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}.
-    </Typography>
-  );
-}
+import Navbar from './Components/Navbar';
+import SideBar from './Components/Sidebar';
+import Dashboard from './Dashboard';
+
+const drawerWidth = 240;
 
 export default function App() {
+  const [open, setOpen] = useState(true);
+
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          Material UI Vite.js example in TypeScript
-        </Typography>
-        <ProTip />
-        <Copyright />
-      </Box>
-    </Container>
+    <>
+      <Navbar open={open} />
+      <div style={{ display: 'flex' }}>
+        <SideBar open={open} toggleDrawer={toggleDrawer} />
+        <main style={{ 
+                flexGrow: 1, 
+                height: '100vh', 
+                overflow: 'auto',
+                marginTop: '64px',
+                width: `calc(100% - ${open ? drawerWidth : 0}px)`,
+                paddingLeft: '20px', // Konstanter Abstand statt margin
+                transition: 'width 0.3s',
+        }}>
+            <Dashboard open={open} />
+        </main>
+      </div>
+    </>
   );
 }
