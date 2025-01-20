@@ -28,12 +28,13 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
             boxSizing: 'border-box',
             overflowX: 'hidden',
             transition: 'width 0.3s',
-            opacity: 0.5,
-            boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.75)',
+            boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.5)',
           },
         }}
       >
-        <Toolbar />
+        <Toolbar >
+        
+        </Toolbar>
         <Divider />
         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '8px' }}>
           <IconButton onClick={toggleDrawer}>

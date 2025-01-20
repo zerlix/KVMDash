@@ -1,54 +1,30 @@
 import { createTheme } from '@mui/material/styles';
-import { GlobalStyles } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
+import { useMemo } from 'react';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import App from './App';
 
-// Erstelle ein benutzerdefiniertes Theme
-const kvmDarkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#f0ebd8', // Benutzerdefinierte Primärfarbe
-    },
-    secondary: {
-      main: '#748cab', // Benutzerdefinierte Sekundärfarbe
-    },
-    background: {
-      default: '#000814', // Benutzerdefinierte Hintergrundfarbe
-      paper: '#001d3d', // Benutzerdefinierte Papierfarbe
-    },
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          backgroundImage: 'linear-gradient(to right top, #000814, #040f1e, #051528, #021932, #001d3d)',
-          margin: 0,
-          padding: 0,
-          height: '100vh',
-          overflow: 'hidden',
+export const useTheme = () => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  return useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'light',
         },
-      },
-    },
-  },
-});
+      }),
+    [prefersDarkMode]
+  );
+};
 
-// Erstelle ein weiteres Dark Theme
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          backgroundImage: 'linear-gradient(to right top, #000000, #050404, #090809, #0c0c0e, #0f1011)',
-          margin: 0,
-          padding: 0,
-          height: '100vh',
-          overflow: 'hidden',
-        },
-      },
-    },
-  },
-});
+export function ThemedApp() {
+  const theme = useTheme();
 
-export { kvmDarkTheme, darkTheme };
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
+  );
+}

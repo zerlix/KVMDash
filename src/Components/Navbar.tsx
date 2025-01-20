@@ -17,7 +17,6 @@ export default function TopMenubar({ open }: TopMenubarProps) {
         width: `calc(100% - ${open ? drawerWidth : 64}px)`,
         marginLeft: open ? drawerWidth : 64,
         transition: 'width 0.3s, margin-left 0.3s',
-        opacity: 0.5,
       }}
     >
       <Toolbar>
