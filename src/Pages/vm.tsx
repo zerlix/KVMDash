@@ -13,7 +13,7 @@ export default function VmContent() {
           Dashboard
         </Typography>
         <Paper sx={{ p: 2 }}>
-          Settings
+          Virtual Maschines
         </Paper>
       </Box>
     </Container>

@@ -103,7 +103,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
 
                 {/* Vm´s Main Link */}
                 <ListItem key="vm" disablePadding>
-                    <ListItemButton onClick={handleVmClick} sx={{ justifyContent: open ? 'initial' : 'center' }}>
+                    <ListItemButton component={Link} to="/vm" onClick={handleVmClick} sx={{ justifyContent: open ? 'initial' : 'center' }}>
                         <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
                             <StorageIcon />
                         </ListItemIcon>
