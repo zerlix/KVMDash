@@ -44,7 +44,17 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                     alignItems: 'center',
                 }}
             >
-                <img src={KvmLogo} alt="Logo" style={{ width: '100%', maxWidth: '50px', height: 'auto' }} />
+                <img
+                    src={KvmLogo}
+                    alt="Logo"
+                    style={{
+                        width: open ? '100%' : '50%',
+                        maxWidth: open ? '100px' : '32px',
+                        minWidth: '32px', // Mindestbreite für das Logo
+                        height: 'auto',
+                        transition: 'width 0.3s, max-width 0.3s'
+                    }}
+                />
             </Toolbar>
 
             <Divider />
