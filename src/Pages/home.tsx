@@ -1,11 +1,7 @@
-import React from 'react';
 import { Typography, Container, Box, Paper } from '@mui/material';
 
-interface DashboardContentProps {
-  open: boolean;
-}
-
-export default function HomeContent({ open }: DashboardContentProps) {
+// Home Page
+export default function HomeContent() {
   return (
     <Container disableGutters sx={{
       maxWidth: 'none',
