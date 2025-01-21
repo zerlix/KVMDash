@@ -1,5 +1,5 @@
 # Projektbeschreibung: KVMDash
-(https://github.com/zerlix/KVMDash/blob/main/src/assets/kvmdash.svg)
+!(https://github.com/zerlix/KVMDash/blob/main/src/assets/kvmdash.svg)
 KVMDash ist eine moderne Webanwendung, die die Verwaltung von Virtual Machines (VMs) und Linux-Containern (LXC) auf Linux-Systemen ermöglicht. Mit einer benutzerfreundlichen Oberfläche erleichtert KVMDash die Administration und Überwachung von Virtualisierungsumgebungen.
 
 
