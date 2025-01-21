@@ -5,7 +5,7 @@ interface DashboardContentProps {
   open: boolean;
 }
 
-export default function DashboardContent({ open }: DashboardContentProps) {
+export default function SettingsContent({ open }: DashboardContentProps) {
   return (
     <Container disableGutters sx={{
       maxWidth: 'none',
@@ -17,7 +17,7 @@ export default function DashboardContent({ open }: DashboardContentProps) {
           Dashboard
         </Typography>
         <Paper sx={{ p: 2 }}>
-          Welcome to the dashboard
+          Settings
         </Paper>
       </Box>
     </Container>
