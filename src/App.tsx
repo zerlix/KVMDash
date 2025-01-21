@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useMediaQuery } from '@mui/material';
 import Navbar from './Components/Navbar';
 import SideBar from './Components/Sidebar';
 import Home from './Dashboard/home';
@@ -9,6 +10,13 @@ const drawerWidth = 240;
 
 export default function App() {
     const [open, setOpen] = useState(true);
+    const isMobile = useMediaQuery('(max-width:600px)');
+
+    useEffect(() => {
+        if (isMobile) {
+            setOpen(false);
+        }
+    }, [isMobile]);
 
     const toggleDrawer = () => {
         setOpen(!open);
