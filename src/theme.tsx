@@ -1,10 +1,10 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, Theme } from '@mui/material/styles';
 import { useMediaQuery } from '@mui/material';
 import { useMemo } from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import App from './App';
 
-export const useTheme = () => {
+const useTheme = (): Theme => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   return useMemo(
