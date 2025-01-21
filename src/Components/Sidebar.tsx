@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Divider, Toolbar, Collapse } from '@mui/material';
+
+// MUI 
 import Drawer from '@mui/material/Drawer';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Divider, Toolbar } from '@mui/material';
+
+// MUI Icons
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
+import ComputerIcon from '@mui/icons-material/Computer';
+import StorageIcon from '@mui/icons-material/Storage';
+import CloudIcon from '@mui/icons-material/Cloud';
+
+// KVMDash Logo
 import KvmLogo from '../assets/kvmdash.svg';
 
 
@@ -17,6 +28,14 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
+    const [openVm, setOpenVm] = useState(false);
+
+    const handleVmClick = () => {
+        if (!open) {
+            toggleDrawer(); // Sidebar ausfahren, wenn sie geschlossen ist
+        }
+        setOpenVm(!openVm);
+    };
     return (
 
 
@@ -60,7 +79,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
             <Divider />
 
             {/* Drawer Close Icon */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '8px' }}>
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'flex-end', 
+                padding: '8px' }}>
                 <IconButton onClick={toggleDrawer}>
                     {open ? <ChevronLeftIcon /> : <MenuIcon />}
                 </IconButton>
@@ -78,6 +100,38 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                         {open && <ListItemText primary="Home" />}
                     </ListItemButton>
                 </ListItem>
+
+                {/* Vm´s Main Link */}
+                <ListItem key="vm" disablePadding>
+                    <ListItemButton onClick={handleVmClick} sx={{ justifyContent: open ? 'initial' : 'center' }}>
+                        <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
+                            <StorageIcon />
+                        </ListItemIcon>
+                        {open && <ListItemText primary="Virtual Maschines" />}
+                        {open ? (openVm ? <ExpandLess /> : <ExpandMore />) : null}
+                    </ListItemButton>
+                </ListItem>
+                
+                {/* Vm´s Link List */}
+                {open && ( // Collapse nur rendern, wenn die Sidebar geöffnet ist
+                <Collapse in={openVm} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <ListItemButton component={Link} to="/vm/sub1" sx={{ pl: 4 }}>
+                        <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
+                            <ComputerIcon />
+                        </ListItemIcon>
+                            <ListItemText primary="Submenu 1" />
+                        </ListItemButton>
+                        <ListItemButton component={Link} to="/vm/sub2" sx={{ pl: 4 }}>
+                        <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
+                            <ComputerIcon />
+                        </ListItemIcon>
+                            <ListItemText primary="Submenu 2" />
+                        </ListItemButton>
+                    </List>
+                </Collapse>
+                )}
+
 
                 {/* Settings Links */}
                 <ListItem key="settings" disablePadding>

@@ -3,8 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useMediaQuery } from '@mui/material';
 import Navbar from './Components/Navbar';
 import SideBar from './Components/Sidebar';
+
+// Routes
 import Home from './Pages/home';
 import Settings from './Pages/settings';
+import Vm from './Pages/vm';
 
 const drawerWidth = 240;
 
@@ -38,6 +41,7 @@ export default function App() {
                 }}>
                     <Routes>
                         <Route path="/" element={<Home/>} />
+                        <Route path="/vm" element={<Vm />} />
                         <Route path="/settings" element={<Settings/>} />
                     </Routes>
                 </main>
