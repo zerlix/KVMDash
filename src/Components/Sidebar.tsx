@@ -5,6 +5,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
+import KvmLogo from '../assets/kvmdash.svg';  // Ohne ReactComponent
+
 
 const drawerWidth = 240;
 
@@ -15,7 +17,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
   return (
-    <>
+   
       <Drawer
         variant="permanent"
         anchor="left"
@@ -33,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
         }}
       >
         <Toolbar >
-        
+            <img src={KvmLogo} alt="Logo" />
         </Toolbar>
         <Divider />
         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '8px' }}>
@@ -60,7 +62,6 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
           </ListItem>
         </List>
       </Drawer>
-    </>
   );
 };
 
