@@ -19,6 +19,7 @@ Ein Linux-System mit:
 Eine detaillierte Anleitung zur Installation von KVM und libvirt unter Debian 12 (Bookworm) finden Sie hier: 
 * [Installation von KVM unter Debian 12 Bookworm](https://themm.curiosum.eu/howto/installation-von-kvm-unter-debian-12-bookworm)
 * [libvirt-howto](https://themm.curiosum.eu/howto/libvirt-howto)
+
 Nach erfolgreicher Installation muss User "www-data" der Gruppe libvirt und kvm hinzugefügt werden.
 ```bash
 usermod -aG libvirt,kvm www-data
