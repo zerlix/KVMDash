@@ -5,9 +5,9 @@
 
 
 ## Features
-### VM- und LXC-Verwaltung
+### VM Verwaltung
 * Erstellen, Löschen und Konfigurieren von VMs und Containern über die Weboberfläche.
-* Nutzung von Vorlagen für die schnelle und standardisierte Erstellung von VMs und Containern.
+* Nutzung von Vorlagen für die schnelle und standardisierte Erstellung von VMs.
 ### Systemmonitoring
 * Echtzeitüberwachung von Ressourcen wie CPU, Arbeitsspeicher, Festplattenauslastung und weiteren wichtigen Systemmetriken.
 * Übersichtliche Darstellung der Systemleistung für eine optimale Kontrolle und Fehleranalyse.
@@ -24,5 +24,4 @@ Nach erfolgreicher Installation muss User "www-data" der Gruppe libvirt und kvm 
 ```bash
 usermod -aG libvirt,kvm www-data
 ```
-## Ziel
-Das Hauptziel von KVMDash ist es, die Komplexität bei der Administration von Virtualisierungsumgebungen zu verringern. Dabei werden Verwaltungs- und Überwachungsfunktionen bereitgestellt, die gleichzeitig leicht zugänglich und intuitiv bedienbar sind.
+
