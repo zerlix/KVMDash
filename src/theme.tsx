@@ -44,25 +44,50 @@ const theme = createTheme({
         MuiCardHeader: {
             styleOverrides: {
                 root: {
-                    backgroundColor: themeColors.primary.main,
+                    backgroundColor: themeColors.primary.dark,
                     color: themeColors.text.primary
+                }
+            }
+        },
+
+        MuiListItem: {
+            styleOverrides: {
+                root: {
+                    color: themeColors.text.primary,
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                        backgroundColor: themeColors.surfaceTonal.dark,
+                        '& .MuiListItemIcon-root': {
+                            color: themeColors.primary.light
+                        },
+                        '& .MuiListItemText-primary': {
+                            color: themeColors.primary.light
+                        }
+                    }
                 }
             }
         },
         MuiListItemIcon: {
             styleOverrides: {
                 root: {
-                    color: themeColors.primary.main,
-                    '&:hover': {
-                        color: themeColors.primary.light
-                    }
+                    color: themeColors.text.primary,
+                    transition: 'color 0.2s ease-in-out'
+                }
+            }
+        },
+        MuiListItemText: {
+            styleOverrides: {
+                primary: {
+                    color: themeColors.text.primary,
+                    transition: 'color 0.2s ease-in-out'
                 }
             }
         },
         MuiIconButton: {
             styleOverrides: {
                 root: {
-                    color: themeColors.primary.main,
+                    color: themeColors.text.primary,
+                    transition: 'all 0.2s ease-in-out',
                     '&:hover': {
                         color: themeColors.primary.light,
                         backgroundColor: themeColors.surfaceTonal.dark
@@ -71,8 +96,7 @@ const theme = createTheme({
             }
         }
     }
-}
-);
+});
 
 export function ThemedApp() {
     return (
