@@ -51,7 +51,6 @@ export default function App() {
         <Router>
             {isLoggedIn ? (
                 <>
-                    <Navbar open={open} />
                     <div style={{ display: 'flex' }}>
                         <SideBar open={open} toggleDrawer={toggleDrawer} />
                         <main style={{
