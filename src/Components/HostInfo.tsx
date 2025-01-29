@@ -1,9 +1,10 @@
-import { Box, Card, Typography, Paper, CardContent, CircularProgress  } from '@mui/material';
+import { Box, Card, Typography, Paper, CardContent, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CardHeader from '@mui/material/CardHeader';
-import Grid from '@mui/material/Grid2';
+import Grid2 from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { red } from '@mui/material/colors';
+import { fetchData } from '../services/apiService';
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(2)
@@ -27,36 +28,16 @@ export default function HostInfo() {
     // API Abruf
     const fetchSystemInfo = async () => {
         try {
-            const token = localStorage.getItem('token');
-            console.log('Token beim Fetch:', token); // Debug Token
-    
-            if (!token) {
-                setError('Nicht authentifiziert');
-                return;
-            }
-    
-            // Teste API mit minimalem Request
-            const response = await fetch('http://kvmdash.back/api/host/info', {
-                headers: {
-                    'Authorization': token // Token senden
-                }
-            });
-    
-            console.log('API Response Status:', response.status); // Debug Response
-    
-            if (!response.ok) {
-                throw new Error(`Status: ${response.status}`);
-            }
-    
-            const result = await response.json();
-            if (result.status === 'success') {
-                setSystemInfo(JSON.parse(result.data));
-            }
-        } catch (err) {
+            const response = await fetchData('host/info');
+            // Parse JSON string aus data
+            const data = JSON.parse(response);
+            setSystemInfo(data);
+            setError(null);
+        } catch (err: any) {
             console.error('Fetch Error:', err);
-            setError('Fehler beim Laden');
+            setError(err.message);
         }
-    };
+    }
 
     // Automatische Aktualisierung
     useEffect(() => {
@@ -68,34 +49,34 @@ export default function HostInfo() {
     // Render
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
-        <Card elevation={3} sx={{ borderRadius: 3 }}>
-            <CardHeader 
-                title="Systeminformationen" 
-            />
-            <CardContent>
-                {error ? (
-                    <Typography color="error">{error}</Typography>
-                ) : !systemInfo ? (
-                    <Box display="flex" justifyContent="center" p={2}>
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <Grid container spacing={2} alignItems="center">
-                        {[
-                            { label: "Hostname", value: systemInfo.Hostname },
-                            { label: "Betriebssystem", value: systemInfo.OperatingSystemPrettyName },
-                            { label: "Kernel", value: `${systemInfo.KernelName} ${systemInfo.KernelRelease}` },
-                            { label: "Hardware", value: `${systemInfo.HardwareVendor} ${systemInfo.HardwareModel}` }
-                        ].map(({ label, value }, index) => (
-                            <Grid item xs={12} md={6} key={index}>
-                                <Typography variant="subtitle2" color="textSecondary">{label}</Typography>
-                                <Typography variant="body1">{value}</Typography>
-                            </Grid>
-                        ))}
-                    </Grid>
-                )}
-            </CardContent>
-        </Card>
-    </Box>
+            <Card elevation={3} sx={{ borderRadius: 3 }}>
+                <CardHeader
+                    title="Systeminformationen"
+                />
+                <CardContent>
+                    {error ? (
+                        <Typography color="error">{error}</Typography>
+                    ) : !systemInfo ? (
+                        <Box display="flex" justifyContent="center" p={2}>
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <Grid2 container spacing={2} alignItems="center">
+                            {[
+                                { label: "Hostname", value: systemInfo.Hostname },
+                                { label: "Betriebssystem", value: systemInfo.OperatingSystemPrettyName },
+                                { label: "Kernel", value: `${systemInfo.KernelName} ${systemInfo.KernelRelease}` },
+                                { label: "Hardware", value: `${systemInfo.HardwareVendor} ${systemInfo.HardwareModel}` }
+                            ].map(({ label, value }, index) => (
+                                <Grid2 item xs={12} md={6} key={index}>
+                                    <Typography variant="subtitle2" color="textSecondary">{label}</Typography>
+                                    <Typography variant="body1">{value}</Typography>
+                                </Grid2>
+                            ))}
+                        </Grid2>
+                    )}
+                </CardContent>
+            </Card>
+        </Box>
     );
 }
