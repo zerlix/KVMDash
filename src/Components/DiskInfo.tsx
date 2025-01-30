@@ -12,6 +12,7 @@ interface DiskData {
     Mounted: string;
 }
 
+// convertToGB Funktion
 const convertToGB = (value: string): number => {
     const unit = value.slice(-1);
     const num = parseFloat(value.slice(0, -1));
@@ -51,6 +52,8 @@ const DiskInfoCard = () => {
 
     useEffect(() => {
         fetchDiskInfo();
+        const interval = setInterval(fetchDiskInfo, 5000);
+        return () => clearInterval(interval);
     }, []);
 
     return (

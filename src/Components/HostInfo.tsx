@@ -23,7 +23,6 @@ export default function HostInfo() {
     const fetchSystemInfo = async () => {
         try {
             const response = await fetchData('host/info');
-            console.log('API Response:', response); // Debugging-Log
             if (response.status === 'success') {
                 setSystemInfo(response.data);
                 setError(null);

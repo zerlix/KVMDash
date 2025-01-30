@@ -44,9 +44,6 @@ const CpuInfoCard = () => {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        console.log('CPU Data:', cpuData); // Debugging-Log
-    }, [cpuData]);
 
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
