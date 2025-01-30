@@ -35,7 +35,6 @@ const MemInfoCard = () => {
         try {
             const response = await fetchData('host/mem');
             if (response.status === 'success') {
-                console.log('API Response:', response.data); // Debugging-Log
                 setMemData(response.data);
             } else {
                 setError(response.message || 'Unbekannter Fehler');
@@ -70,60 +69,54 @@ const MemInfoCard = () => {
     const availableGB = convertToGB(memData.available);
     const usedPercentage = (usedGB / totalGB) * 100;
 
-    console.log('Total GB:', totalGB); // Debugging-Log
-    console.log('Used GB:', usedGB); // Debugging-Log
-    console.log('Available GB:', availableGB); // Debugging-Log
-
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
             <Card elevation={3} sx={{ borderRadius: 3 }}>
                 <CardHeader title="Speicherinformationen" />
                 <CardContent>
                     <Grid container spacing={2}>
-                        <Grid size={{ xs: 12, md: 6 }}>
-                            <Box sx={{ mb: 2 }}>
-                                <Typography variant="body2" sx={{ mb: 1 }}>
-                                    Gesamtspeicher: {memData.total}
-                                </Typography>
-                                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                    <Box sx={{ width: '100%', mr: 1, position: 'relative' }}>
-                                        <LinearProgress
-                                            variant="determinate"
-                                            value={100}
-                                            sx={{
-                                                height: 8,
-                                                borderRadius: 4,
-                                                backgroundColor: 'transparent',
-                                                '& .MuiLinearProgress-bar': {
-                                                    backgroundColor: '#00c853' // Grün für den gesamten Speicherplatz
-                                                }
-                                            }}
-                                        />
-                                        <LinearProgress
-                                            variant="determinate"
-                                            value={usedPercentage}
-                                            sx={{
-                                                height: 8,
-                                                borderRadius: 4,
-                                                backgroundColor: 'transparent',
-                                                '& .MuiLinearProgress-bar': {
-                                                    backgroundColor: '#ff4444' // Rot für den belegten Speicherplatz
-                                                },
-                                                position: 'absolute',
-                                                top: 0,
-                                                left: 0,
-                                                width: '100%'
-                                            }}
-                                        />
-                                    </Box>
-                                    <Typography variant="body2" sx={{ minWidth: 45 }}>
-                                        {memData.used}
-                                    </Typography>
+                        <Grid  size={{xs:12}}>
+                            <Typography variant="body2" sx={{ mb: 1 }}>
+                                Gesamtspeicher: {memData.total}
+                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2 }}>
+                                <Box sx={{ width: '100%', mr: 1, position: 'relative' }}>
+                                    <LinearProgress
+                                        variant="determinate"
+                                        value={100}
+                                        sx={{
+                                            height: 8,
+                                            borderRadius: 4,
+                                            backgroundColor: 'transparent',
+                                            '& .MuiLinearProgress-bar': {
+                                                backgroundColor: '#00c853' // Grün für den gesamten Speicherplatz
+                                            }
+                                        }}
+                                    />
+                                    <LinearProgress
+                                        variant="determinate"
+                                        value={usedPercentage}
+                                        sx={{
+                                            height: 8,
+                                            borderRadius: 4,
+                                            backgroundColor: 'transparent',
+                                            '& .MuiLinearProgress-bar': {
+                                                backgroundColor: '#ff4444' // Rot für den belegten Speicherplatz
+                                            },
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%'
+                                        }}
+                                    />
                                 </Box>
-                                <Typography variant="body2" sx={{ mt: 1 }}>
-                                    Verfügbar: {memData.available} (Gesamt: {memData.total}, Belegt: {memData.used})
+                                <Typography variant="body2" sx={{ minWidth: 45 }}>
+                                    {memData.used}
                                 </Typography>
                             </Box>
+                            <Typography variant="body2">
+                                Verfügbar: {availableGB} GiB (Gesamt: {totalGB} GiB, Belegt: {usedGB} GiB)
+                            </Typography>
                         </Grid>
                     </Grid>
                 </CardContent>
