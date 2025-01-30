@@ -3,12 +3,13 @@ import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "
 import Grid from '@mui/material/Grid2';
 import { fetchData } from '../services/apiService';
 
-interface CpuData {
-    cpu: string;
-    total: number;
-    idle: number;
-    used: number;
-    usage: number;
+interface DiskData {
+    Filesystem: string;
+    Size: string;
+    Used: string;
+    Avail: string;
+    Use: string;
+    Mounted: string;
 }
 
 const getUsageColor = (usage: number) => {
@@ -17,41 +18,34 @@ const getUsageColor = (usage: number) => {
     return '#00c853';                     // Grün bei niedriger Last
 };
 
-const CpuInfoCard = () => {
-    const [cpuData, setCpuData] = useState<CpuData[]>([]);
+const DiskInfoCard = () => {
+    const [diskData, setDiskData] = useState<DiskData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchCpuInfo = async () => {
+    const fetchDiskInfo = async () => {
         try {
-            const response = await fetchData('host/cpu');
+            const response = await fetchData('host/disk');
             if (response.status === 'success') {
-                const filteredData = response.data.filter((cpu: CpuData) => cpu.cpu !== 'cpu');
-                setCpuData(filteredData);
+                setDiskData(response.data);
             } else {
                 setError(response.message || 'Unbekannter Fehler');
             }
             setLoading(false);
         } catch (err: any) {
-            setError(`Error: ${err.message}`);
+            setError(err.message);
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchCpuInfo();
-        const interval = setInterval(fetchCpuInfo, 5000);
-        return () => clearInterval(interval);
+        fetchDiskInfo();
     }, []);
-
-    useEffect(() => {
-        console.log('CPU Data:', cpuData); // Debugging-Log
-    }, [cpuData]);
 
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
             <Card elevation={3} sx={{ borderRadius: 3 }}>
-                <CardHeader title="CPU Auslastung" />
+                <CardHeader title="Festplatteninformationen" />
                 <CardContent>
                     {loading ? (
                         <Typography>Loading...</Typography>
@@ -59,28 +53,28 @@ const CpuInfoCard = () => {
                         <Typography color="error">{error}</Typography>
                     ) : (
                         <Grid container spacing={1}>
-                            {cpuData.map((cpu) => (
-                                <Grid size={{xs: 12, md: 6}} key={cpu.cpu}>
+                            {diskData.map((disk, index) => (
+                                <Grid size={{xs: 12, md: 6}} key={index}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                         <Typography variant="body2" sx={{ minWidth: 60 }}>
-                                            Core {cpu.cpu.replace('cpu', '')}
+                                            {disk.Filesystem}
                                         </Typography>
                                         <Box sx={{ width: '100%', mr: 1 }}>
                                             <LinearProgress 
                                                 variant="determinate" 
-                                                value={cpu.usage} 
+                                                value={parseFloat(disk.Use)} 
                                                 sx={{
                                                     height: 8,
                                                     borderRadius: 4,
                                                     backgroundColor: 'surface.main',
                                                     '& .MuiLinearProgress-bar': {
-                                                        backgroundColor: getUsageColor(cpu.usage)
+                                                        backgroundColor: getUsageColor(parseFloat(disk.Use))
                                                     }
                                                 }}
                                             />
                                         </Box>
                                         <Typography variant="body2" sx={{ minWidth: 45 }}>
-                                            {cpu.usage.toFixed(1)}%
+                                            {disk.Use}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -93,4 +87,4 @@ const CpuInfoCard = () => {
     );
 };
 
-export default CpuInfoCard;
+export default DiskInfoCard;

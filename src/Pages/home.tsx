@@ -4,6 +4,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid2';
 import HostInfo from '../Components/HostInfo';
 import CpuInfo from '../Components/CpuInfo';
+import DiskInfo from '../Components/DiskInfo'
 
 const Item = styled(Paper)(({ theme }) => ({
 
@@ -17,6 +18,7 @@ export default function HomeContent() {
         <Box sx={{ flexGrow: 1, padding: 4 }}>
             <HostInfo />
             <CpuInfo />
+            <DiskInfo />
         </Box>
 
     
