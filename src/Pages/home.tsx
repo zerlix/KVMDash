@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid2';
 import HostInfo from '../Components/HostInfo';
 import CpuInfo from '../Components/CpuInfo';
 import DiskInfo from '../Components/DiskInfo'
+import MemInfo from '../Components/MemInfo';
 
 
 // Home Page
@@ -14,11 +15,15 @@ export default function HomeContent() {
                     <HostInfo />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                    <CpuInfo />
+                    <MemInfo />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <DiskInfo />
                 </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                    <CpuInfo />
+                </Grid>
+                
             </Grid>
         </Box>
     );
