@@ -4,11 +4,9 @@ import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { fetchData } from '../services/apiService';
 
-const Item = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(2)
-}));
 
-// Definiere Datenstruktur
+
+// Definiere API Datenstruktur
 interface SystemInfo {
     Hostname: string;
     KernelName: string;
@@ -51,17 +49,20 @@ export default function HostInfo() {
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
             <Card elevation={3} sx={{ borderRadius: 3 }}>
-                <CardHeader
+                <CardHeader 
                     title="Systeminformationen"
                 />
                 <CardContent>
                     {error ? (
+                        // errormessage
                         <Typography color="error">{error}</Typography>
                     ) : !systemInfo ? (
+                        // progress (loading)
                         <Box display="flex" justifyContent="center" p={2}>
                             <CircularProgress />
                         </Box>
                     ) : (
+                        // output
                         <Grid container spacing={2} alignItems="center">
                             {[
                                 { label: "Hostname", value: systemInfo.Hostname },
