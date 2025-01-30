@@ -19,6 +19,7 @@
     "react-router-dom": "^7.1.3"
   },
   "devDependencies": {
+    "@mui/types": "^7.2.21",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "^4.3.4",

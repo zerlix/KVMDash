@@ -1,9 +1,7 @@
-import { Box, Card, Typography, Paper, CardContent, CircularProgress } from '@mui/material';
+import { Box, Card, CardHeader, Typography, Paper, CardContent, CircularProgress } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { styled } from '@mui/material/styles';
-import CardHeader from '@mui/material/CardHeader';
-import Grid2 from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
-import { red } from '@mui/material/colors';
 import { fetchData } from '../services/apiService';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -46,6 +44,9 @@ export default function HostInfo() {
         return () => clearInterval(interval);
     }, []);
 
+
+
+    
     // Render
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
@@ -61,19 +62,19 @@ export default function HostInfo() {
                             <CircularProgress />
                         </Box>
                     ) : (
-                        <Grid2 container spacing={2} alignItems="center">
+                        <Grid container spacing={2} alignItems="center">
                             {[
                                 { label: "Hostname", value: systemInfo.Hostname },
                                 { label: "Betriebssystem", value: systemInfo.OperatingSystemPrettyName },
                                 { label: "Kernel", value: `${systemInfo.KernelName} ${systemInfo.KernelRelease}` },
                                 { label: "Hardware", value: `${systemInfo.HardwareVendor} ${systemInfo.HardwareModel}` }
                             ].map(({ label, value }, index) => (
-                                <Grid2 item xs={12} md={6} key={index}>
+                                <Grid size={{ xs: 12, md: 6}} key={index}>
                                     <Typography variant="subtitle2" color="textSecondary">{label}</Typography>
                                     <Typography variant="body1">{value}</Typography>
-                                </Grid2>
+                                </Grid>
                             ))}
-                        </Grid2>
+                        </Grid>
                     )}
                 </CardContent>
             </Card>
