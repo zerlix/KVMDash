@@ -1,6 +1,7 @@
 interface ApiResponse {
     status: string;
     data: any;
+    message?: string; // Optional hinzufügen
 }
 
 export const fetchData = async (endpoint: string) => {
@@ -22,8 +23,8 @@ export const fetchData = async (endpoint: string) => {
 
     const result: ApiResponse = await response.json();
     if (result.status === 'success') {
-        console.log(result.data);
-        return(result.data);
+        //console.log(result.data);
+        return(result);
     }
 
     throw new Error('Ungültige Daten');

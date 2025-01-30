@@ -4,8 +4,6 @@ import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { fetchData } from '../services/apiService';
 
-
-
 // Definiere API Datenstruktur
 interface SystemInfo {
     Hostname: string;
@@ -25,10 +23,13 @@ export default function HostInfo() {
     const fetchSystemInfo = async () => {
         try {
             const response = await fetchData('host/info');
-            // Parse JSON string aus data
-            const data = JSON.parse(response);
-            setSystemInfo(data);
-            setError(null);
+            console.log('API Response:', response); // Debugging-Log
+            if (response.status === 'success') {
+                setSystemInfo(response.data);
+                setError(null);
+            } else {
+                setError(response.message || 'Unbekannter Fehler');
+            }
         } catch (err: any) {
             console.error('Fetch Error:', err);
             setError(err.message);
@@ -42,9 +43,6 @@ export default function HostInfo() {
         return () => clearInterval(interval);
     }, []);
 
-
-
-    
     // Render
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
@@ -70,7 +68,7 @@ export default function HostInfo() {
                                 { label: "Kernel", value: `${systemInfo.KernelName} ${systemInfo.KernelRelease}` },
                                 { label: "Hardware", value: `${systemInfo.HardwareVendor} ${systemInfo.HardwareModel}` }
                             ].map(({ label, value }, index) => (
-                                <Grid size={{ xs: 12, md: 6}} key={index}>
+                                <Grid size={{xs: 12, md: 6}} key={index}>
                                     <Typography variant="subtitle2" color="textSecondary">{label}</Typography>
                                     <Typography variant="body1">{value}</Typography>
                                 </Grid>
