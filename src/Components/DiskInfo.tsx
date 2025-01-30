@@ -14,7 +14,7 @@ interface DiskData {
 
 const getUsageColor = (usage: number) => {
     if (usage > 80) return '#ff4444';     // Rot bei hoher Last
-    if (usage > 60) return '#ffaa00';     // Orange bei mittlerer Last
+    if (usage > 10) return '#ffaa00';     // Orange bei mittlerer Last
     return '#00c853';                     // Grün bei niedriger Last
 };
 
@@ -52,18 +52,19 @@ const DiskInfoCard = () => {
                     ) : error ? (
                         <Typography color="error">{error}</Typography>
                     ) : (
-                        <Grid container spacing={1}>
+                        <Grid container spacing={2}>
                             {diskData.map((disk, index) => (
-                                <Grid size={{xs: 12, md: 6}} key={index}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                        <Typography variant="body2" sx={{ minWidth: 60 }}>
-                                            {disk.Filesystem}
+                                <Grid size={{ xs: 12, md: 6 }} key={index}>
+                                    <Box sx={{ mb: 2 }}>
+                                        <Typography variant="body2" sx={{ mb: 1 }}>
+                                            {disk.Mounted} 
                                         </Typography>
-                                        <Box sx={{ width: '100%', mr: 1 }}>
-                                            <LinearProgress 
-                                                variant="determinate" 
-                                                value={parseFloat(disk.Use)} 
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={parseFloat(disk.Use)}
                                                 sx={{
+                                                    width: '100%',
                                                     height: 8,
                                                     borderRadius: 4,
                                                     backgroundColor: 'surface.main',
@@ -72,9 +73,12 @@ const DiskInfoCard = () => {
                                                     }
                                                 }}
                                             />
+                                            <Typography variant="body2" sx={{ ml: 2, minWidth: 45 }}>
+                                                {disk.Use}
+                                            </Typography>
                                         </Box>
-                                        <Typography variant="body2" sx={{ minWidth: 45 }}>
-                                            {disk.Use}
+                                        <Typography variant="body2" sx={{ mt: 1 }}>
+                                            Verfügbar: {disk.Avail} ({disk.Size} total, {disk.Used} used)
                                         </Typography>
                                     </Box>
                                 </Grid>
