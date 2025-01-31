@@ -43,6 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
             const response = await fetchData('qemu/list');
             if (response.status === 'success') {
                 setVmList(Object.keys(response.data));
+                console.log(Object.keys(response.data));
             } else {
                 console.error(response.message || 'Unbekannter Fehler');
             }
@@ -98,10 +99,11 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
             <Divider />
 
             {/* Drawer Close Icon */}
-            <div style={{ 
-                display: 'flex', 
-                justifyContent: 'flex-end', 
-                padding: '8px' }}>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                padding: '8px'
+            }}>
                 <IconButton onClick={toggleDrawer}>
                     {open ? <ChevronLeftIcon /> : <MenuIcon />}
                 </IconButton>
@@ -130,21 +132,21 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                         {open ? (openVm ? <ExpandLess /> : <ExpandMore />) : null}
                     </ListItemButton>
                 </ListItem>
-                
+
                 {/* Vm´s Link List */}
                 {open && ( // Collapse nur rendern, wenn die Sidebar geöffnet ist
-                <Collapse in={openVm} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        {vmList.map((vm) => (
-                            <ListItemButton key={vm} component={Link} to={`/vm/${vm}`} sx={{ pl: 4 }}>
-                                <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
-                                    <ComputerIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={vm} />
-                            </ListItemButton>
-                        ))}
-                    </List>
-                </Collapse>
+                    <Collapse in={openVm} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                            {vmList.sort().map((vm) => (
+                                <ListItemButton key={vm} component={Link} to={`/vm/${vm}`} sx={{ pl: 4 }}>
+                                    <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
+                                        <ComputerIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={vm} />
+                                </ListItemButton>
+                            ))}
+                        </List>
+                    </Collapse>
                 )}
 
 
