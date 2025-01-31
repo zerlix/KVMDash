@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Divider, Toolbar, Collapse } from '@mui/material';
 
@@ -14,11 +14,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StorageIcon from '@mui/icons-material/Storage';
-import CloudIcon from '@mui/icons-material/Cloud';
 
 // KVMDash Logo
 import KvmLogo from '../assets/kvmdash.svg';
 
+import { fetchData } from '../services/apiService';
 
 const drawerWidth = 240;
 
@@ -29,6 +29,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     const [openVm, setOpenVm] = useState(false);
+    const [vmList, setVmList] = useState<string[]>([]);
 
     const handleVmClick = () => {
         if (!open) {
@@ -36,6 +37,24 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
         }
         setOpenVm(!openVm);
     };
+
+    const fetchVmList = async () => {
+        try {
+            const response = await fetchData('qemu/list');
+            if (response.status === 'success') {
+                setVmList(Object.keys(response.data));
+            } else {
+                console.error(response.message || 'Unbekannter Fehler');
+            }
+        } catch (err: any) {
+            console.error(`Error: ${err.message}`);
+        }
+    };
+
+    useEffect(() => {
+        fetchVmList();
+    }, []);
+
     return (
 
 
@@ -116,18 +135,14 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                 {open && ( // Collapse nur rendern, wenn die Sidebar geöffnet ist
                 <Collapse in={openVm} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItemButton component={Link} to="/vm/sub1" sx={{ pl: 4 }}>
-                        <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
-                            <ComputerIcon />
-                        </ListItemIcon>
-                            <ListItemText primary="Submenu 1" />
-                        </ListItemButton>
-                        <ListItemButton component={Link} to="/vm/sub2" sx={{ pl: 4 }}>
-                        <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
-                            <ComputerIcon />
-                        </ListItemIcon>
-                            <ListItemText primary="Submenu 2" />
-                        </ListItemButton>
+                        {vmList.map((vm) => (
+                            <ListItemButton key={vm} component={Link} to={`/vm/${vm}`} sx={{ pl: 4 }}>
+                                <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
+                                    <ComputerIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={vm} />
+                            </ListItemButton>
+                        ))}
                     </List>
                 </Collapse>
                 )}
