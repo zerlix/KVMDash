@@ -55,7 +55,6 @@ export default function App() {
                         <SideBar open={open} toggleDrawer={toggleDrawer} />
                         <main style={{
                             flexGrow: 1,
-                            height: '100vh',
                             overflow: 'auto',
                             marginTop: '64px',
                             width: `calc(100% - ${open ? drawerWidth : 64}px)`,
