@@ -42,8 +42,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
         try {
             const response = await fetchData('qemu/list');
             if (response.status === 'success') {
-                setVmList(Object.keys(response.data));
-                console.log(Object.keys(response.data));
+                setVmList(response.data); // Speichere die kompletten VM-Daten
+                console.log(response.data);
             } else {
                 console.error(response.message || 'Unbekannter Fehler');
             }
@@ -55,6 +55,11 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     useEffect(() => {
         fetchVmList();
     }, []);
+
+
+    const getVmStatusColor = (vmData: any) => {
+        return vmData['state.state'] === '1' ? 'green' : 'grey';
+    };
 
     return (
 
@@ -137,15 +142,15 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                 {open && ( // Collapse nur rendern, wenn die Sidebar geöffnet ist
                     <Collapse in={openVm} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            {vmList.sort().map((vm) => (
-                                <ListItemButton key={vm} component={Link} to={`/vm/${vm}`} sx={{ pl: 4 }}>
-                                    <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
-                                        <ComputerIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={vm} />
-                                </ListItemButton>
-                            ))}
-                        </List>
+                                {Object.entries(vmList).map(([vmName, vmData]) => (
+                                    <ListItem key={vmName}>
+                                        <ListItemIcon>
+                                            <ComputerIcon sx={{ color: getVmStatusColor(vmData) }} />
+                                        </ListItemIcon>
+                                        <ListItemText primary={vmName} />
+                                    </ListItem>
+                                ))}
+                            </List>
                     </Collapse>
                 )}
 
