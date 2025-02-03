@@ -9,12 +9,15 @@ import {
   CardActions,
   CardHeader
 } from '@mui/material';
+
+// Icons
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { fetchData } from '../services/apiService';
+import { fetchVmList } from '../services/vmService';
 import Grid from '@mui/material/Grid2';
 
+// interface
 interface VmData {
   [key: string]: {
     'state.state': string;
@@ -28,22 +31,17 @@ export default function VmContent() {
   const [vms, setVms] = useState<VmData>({});
   const [error, setError] = useState<string | null>(null);
 
-  const fetchVmList = async () => {
-    try {
-      const response = await fetchData('qemu/list');
-      if (response.status === 'success') {
-        setVms(response.data);
-      } else {
-        setError(response.message || 'Unbekannter Fehler');
-      }
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
   useEffect(() => {
-    fetchVmList();
-    const interval = setInterval(fetchVmList, 5000);
+    const fetchData = async () => {
+      try {
+        const data = await fetchVmList();
+        setVms(data);
+      } catch (err: any) {
+        setError(err.message);
+      }
+    };
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
   }, []);
 

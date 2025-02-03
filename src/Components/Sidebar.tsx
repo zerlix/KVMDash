@@ -18,7 +18,7 @@ import StorageIcon from '@mui/icons-material/Storage';
 // KVMDash Logo
 import KvmLogo from '../assets/kvmdash.svg';
 
-import { fetchData } from '../services/apiService';
+import { fetchVmList } from '../services/vmService';
 
 const drawerWidth = 240;
 
@@ -29,7 +29,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     const [openVm, setOpenVm] = useState(false);
-    const [vmList, setVmList] = useState<string[]>([]);
+    const [vmList, setVmList] = useState<any[]>([]);
 
     const handleVmClick = () => {
         if (!open) {
@@ -38,22 +38,16 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
         setOpenVm(!openVm);
     };
 
-    const fetchVmList = async () => {
-        try {
-            const response = await fetchData('qemu/list');
-            if (response.status === 'success') {
-                setVmList(response.data); // Speichere die kompletten VM-Daten
-                console.log(response.data);
-            } else {
-                console.error(response.message || 'Unbekannter Fehler');
-            }
-        } catch (err: any) {
-            console.error(`Error: ${err.message}`);
-        }
-    };
-
     useEffect(() => {
-        fetchVmList();
+        const fetchData = async () => {
+            try {
+                const data = await fetchVmList();
+                setVmList(data);
+            } catch (err: any) {
+                console.error(err.message);
+            }
+        };
+        fetchData();
     }, []);
 
 
