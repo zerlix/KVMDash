@@ -48,9 +48,11 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
             }
         };
         fetchData();
+        const interval = setInterval(fetchData, 5000);
+        return () => clearInterval(interval);
     }, []);
 
-
+    // Funktion um die Farbe des ComputerIcons zu bestimmen
     const getVmStatusColor = (vmData: any) => {
         return vmData['state.state'] === '1' ? 'green' : 'grey';
     };
