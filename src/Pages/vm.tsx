@@ -45,25 +45,22 @@ export default function VmContent() {
         setLoading(vmName);
         setError(null);
 
-        // Promise mit Timeout
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => reject(new Error('Aktion hat zu lange gedauert')), VM_ACTION_TIMEOUT);
         });
 
         try {
-            // Race zwischen API-Call und Timeout
             await Promise.race([
                 fetchData(`qemu/${action}/${vmName}`, { method: 'POST' }),
                 timeoutPromise
             ]);
-
+            // Minimale Anzeigezeit für Loading bei Stop-Aktion
+            if (action === 'stop') {
+                await new Promise(resolve => setTimeout(resolve, 5000));
+            }
         } catch (err: any) {
             console.error(`VM ${action} Fehler:`, err);
             setError(`VM Aktion fehlgeschlagen: ${err.message}`);
-            
-            // Force-Refresh der VM-Liste bei Timeout
-            const data = await fetchVmList();
-            setVms(data);
         } finally {
             setLoading('');
         }
