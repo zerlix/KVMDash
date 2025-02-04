@@ -22,10 +22,16 @@ interface VmData {
   [key: string]: {
     'state.state': string;
     'state.reason': string;
-    'memory': string;
-    'vcpu': string;
+    'balloon.current': string;  
+    'vcpu.current': string;
   }
 }
+
+// Hilfsfunktion zum Konvertieren von KB in GB
+const formatMemory = (memoryKB: string) => {
+    return (parseInt(memoryKB) / 1024 / 1024).toFixed(1) + ' GB';
+  };
+
 
 export default function VmContent() {
   const [vms, setVms] = useState<VmData>({});
@@ -74,15 +80,14 @@ export default function VmContent() {
                 />
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">
-                    Speicher: {vmData.memory}
+                    Speicher: {formatMemory(vmData['balloon.current'])}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    vCPUs: {vmData.vcpu}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Status: {vmData['state.reason']}
+                    vCPUs: {vmData['vcpu.current']}
+
                   </Typography>
                 </CardContent>
+
                 <CardActions>
                   <IconButton 
                     size="small" 
