@@ -17,9 +17,11 @@ interface VmData {
 }
 
 export default function VmContent() {
+
     const [vms, setVms] = useState<VmData>({});
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<string>('');
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +37,38 @@ export default function VmContent() {
         return () => clearInterval(interval);
     }, []);
 
+
+    // Timeout für VM-Aktionen
+    const VM_ACTION_TIMEOUT = 30000; // 30 Sekunden
+
+    const handleVmAction = async (action: string, vmName: string) => {
+        setLoading(vmName);
+        setError(null);
+
+        // Promise mit Timeout
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Aktion hat zu lange gedauert')), VM_ACTION_TIMEOUT);
+        });
+
+        try {
+            // Race zwischen API-Call und Timeout
+            await Promise.race([
+                fetchData(`qemu/${action}/${vmName}`, { method: 'POST' }),
+                timeoutPromise
+            ]);
+
+        } catch (err: any) {
+            console.error(`VM ${action} Fehler:`, err);
+            setError(`VM Aktion fehlgeschlagen: ${err.message}`);
+            
+            // Force-Refresh der VM-Liste bei Timeout
+            const data = await fetchVmList();
+            setVms(data);
+        } finally {
+            setLoading('');
+        }
+    };
+
     // Status Funktionen
     const getStatusColor = (state: string) => {
         return state === '1' ? 'success' : 'error';
@@ -48,26 +82,6 @@ export default function VmContent() {
         return (parseInt(memoryKB) / 1024 / 1024).toFixed(1) + ' GB';
     };
 
-    // VM Aktionen
-    const handleVmAction = async (action: string, vmName: string) => {
-        setLoading(vmName);
-        setError(null);
-
-        try {
-            await fetchData(`qemu/${action}/${vmName}`, { method: 'POST' });
-            setTimeout(() => {
-                const fetchNewData = async () => {
-                    const data = await fetchVmList();
-                    setVms(data);
-                };
-                fetchNewData();
-            }, 1000);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading('');
-        }
-    };
 
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
@@ -108,7 +122,7 @@ export default function VmContent() {
                                     <IconButton
                                         size="small"
                                         color="error"
-                                        disabled={vmData['state.state'] === '0' || loading === vmName}
+                                        disabled={vmData['state.state'] === '5' || loading === vmName}
                                         onClick={() => handleVmAction('stop', vmName)}
                                     >
                                         <StopIcon />
@@ -116,7 +130,7 @@ export default function VmContent() {
                                     <IconButton
                                         size="small"
                                         color="primary"
-                                        disabled={vmData['state.state'] === '0' || loading === vmName}
+                                        disabled={vmData['state.state'] === '5' || loading === vmName}
                                         onClick={() => handleVmAction('reboot', vmName)}
                                     >
                                         <RestartAltIcon />
