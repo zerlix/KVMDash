@@ -17,6 +17,7 @@
 Ein Linux-System mit:
 * Installiertem KVM (Kernel-based Virtual Machine).
 * Installiertem libvirt für die Verwaltung von Virtualisierungsressourcen.
+* Instaliertem KVMDash-API - https://github.com/zerlix/KVMDash-API
 
 Eine detaillierte Anleitung zur Installation von KVM und libvirt unter Debian 12 (Bookworm) finden Sie hier: 
 * [Installation von KVM unter Debian 12 Bookworm](https://themm.curiosum.eu/howto/installation-von-kvm-unter-debian-12-bookworm)
