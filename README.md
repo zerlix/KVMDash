@@ -1,6 +1,6 @@
 # Projektbeschreibung: KVMDash
 
-| ![KvmDash Logo](src/assets/kvmdash.svg) | KVMDash ist eine moderne Webanwendung, die die Verwaltung von Virtual Machines (VMs) auf Linux-Systemen ermöglicht. Mit einer benutzerfreundlichen Oberfläche erleichtert KVMDash die Administration und Überwachung von Virtualisierungsumgebungen. |
+| ![KvmDash Logo](src/assets/kvmdash.svg) | KVMDash ist eine Webanwendung, die die Verwaltung von Virtual Machines (VMs) auf Linux-Systemen ermöglicht. Mit einer benutzerfreundlichen Oberfläche erleichtert KVMDash die Administration und Überwachung von Virtualisierungsumgebungen. |
 |-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 [![YouTube Video](https://img.youtube.com/vi/MWDK3TcuIK4/0.jpg)](https://www.youtube.com/watch?v=MWDK3TcuIK4)
