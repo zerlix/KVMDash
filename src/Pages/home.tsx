@@ -13,7 +13,7 @@ export default function HomeContent() {
             SpiceTest
             <SpiceViewer
                 host="192.168.0.200"
-                port={6080}
+                port={6081}
                 password="optional-password"
             />
 
