@@ -10,14 +10,14 @@ import { SpiceViewer } from '../Components/SpiceViewer';
 export default function HomeContent() {
     return (
         <Box sx={{ flexGrow: 1, padding: 4 }}>
-                    SpiceTest
-                    <SpiceViewer
-                        host="192.168.0.200"
-                        port={6080}
-                        password="optional-password"
-                    />
-            
-                <Grid container spacing={2}>
+            SpiceTest
+            <SpiceViewer
+                host="192.168.0.200"
+                port={6080}
+                password="optional-password"
+            />
+
+            <Grid container spacing={2}>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <HostInfo />
                 </Grid>
