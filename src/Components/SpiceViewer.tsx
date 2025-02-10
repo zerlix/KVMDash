@@ -42,49 +42,103 @@ const createMessageDiv = (container: HTMLDivElement) => {
   return messageDiv;
 };
 
+
+
 export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const spiceConnectionRef = useRef<any>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const spiceConnectionRef = useRef<any>(null);
+    const renderLoopRef = useRef<number>();
+    
+    useEffect(() => {
+      if (!containerRef.current) return;
   
-  useEffect(() => {
-    if (!containerRef.current) return;
+      const container = containerRef.current;
+      
+      // Sicherstellen, dass alte Elemente entfernt werden
+      const oldDisplay = document.getElementById('spice-area');
+      const oldMessage = document.getElementById('message-div');
+      if (oldDisplay) oldDisplay.remove();
+      if (oldMessage) oldMessage.remove();
+      
+      container.innerHTML = '';
+      container.style.position = 'relative';
+  
+      const messageDiv = createMessageDiv(container);
+      const display = createSpiceDisplay(container);
+  
+      let isComponentMounted = true; // Flag für Cleanup
 
-    const container = containerRef.current;
-    container.innerHTML = '';
-    container.style.position = 'relative';
-
-    const messageDiv = createMessageDiv(container);
-    const display = createSpiceDisplay(container);
-
-    console.log('🖥️ Display Setup:', { container, display, message: messageDiv });
-
-    try {
-      spiceConnectionRef.current = new SpiceMainConn({
-        uri: `ws://${host}:${port}`,
-        screen_id: 'spice-area',  // ID des Display-Containers,
-        password: password,
-        onerror: (e: Event) => {
-          console.error('🔴 SPICE Error:', e);
-          messageDiv.textContent = `Fehler: ${e.type}`;
-        },
-        onsuccess: () => {
-          console.log('🟢 SPICE Verbindung hergestellt');
-          messageDiv.textContent = 'Verbunden';
-          display.focus();
-        },
-        onagent: (agent: SpiceAgent) => {
-          console.log('🤝 SPICE Agent verbunden');
-          agent.connect_display(display);
-          display.focus();
+      try {
+        spiceConnectionRef.current = new SpiceMainConn({
+          uri: `ws://${host}:${port}`,
+          screen_id: 'spice-area',
+          password: password,
+          onerror: (e: Event) => {
+            if (!isComponentMounted) return;
+            console.error('🔴 SPICE Error:', e);
+            messageDiv.textContent = `Fehler: ${e.type}`;
+          },
+          onsuccess: () => {
+            if (!isComponentMounted) return;
+            console.log('🟢 SPICE Verbindung hergestellt');
+            messageDiv.textContent = 'Verbunden';
+            display.focus();
+          },
+          onagent: (agent: SpiceAgent) => {
+            if (!isComponentMounted) return;
+            console.log('🤝 SPICE Agent verbunden');
+            
+            const renderLoop = () => {
+              if (!isComponentMounted) return;
+              if (spiceConnectionRef.current) {
+                agent.connect_display(display);
+              }
+              renderLoopRef.current = requestAnimationFrame(renderLoop);
+            };
+            
+            renderLoopRef.current = requestAnimationFrame(renderLoop);
+            display.focus();
+          }
+        });
+      } catch (error) {
+        console.error('💥 SPICE Initialisierungsfehler:', error);
+        messageDiv.textContent = `Initialisierungsfehler: ${error}`;
+      }
+  
+      // Verbessertes Cleanup
+      return () => {
+        isComponentMounted = false; // Verhindert weitere Updates
+        
+        // Animation Frame stoppen
+        if (renderLoopRef.current) {
+          cancelAnimationFrame(renderLoopRef.current);
+          renderLoopRef.current = undefined;
         }
-      });
-    } catch (error) {
-      console.error('💥 SPICE Initialisierungsfehler:', error);
-      messageDiv.textContent = `Initialisierungsfehler: ${error}`;
-    }
+        
+        // SPICE Verbindung beenden
+        if (spiceConnectionRef.current) {
+          try {
+            spiceConnectionRef.current.stop();
+            spiceConnectionRef.current = null;
+          } catch (error) {
+            console.error('Cleanup error:', error);
+          }
+        }
+  
+        // Explizites DOM Cleanup
+        const spiceArea = document.getElementById('spice-area');
+        const messageDiv = document.getElementById('message-div');
+        if (spiceArea) spiceArea.remove();
+        if (messageDiv) messageDiv.remove();
 
-    return () => spiceConnectionRef.current?.stop();
-  }, [host, port, password]);
+        // Container leeren
+        if (container) {
+          container.innerHTML = '';
+        }
+      };
+    }, [host, port, password]);
+
+
 
   return (
     <div 
