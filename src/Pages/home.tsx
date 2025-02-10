@@ -23,7 +23,7 @@ export default function HomeContent() {
                 <Grid size={{ xs: 12, md: 6 }}>
                     <CpuInfo />
                 </Grid>
-                
+
             </Grid>
         </Box>
     );
