@@ -134,9 +134,8 @@ export default function VmDetailsPage() {
                         </CardContent>
                     </Card>
                 </Grid>
-            </Grid>
 
-            <Grid size={{ xs: 12 }}>
+                <Grid size={{ xs: 12 }}>
                 <Card elevation={3}>
                     <CardHeader
                         title="SPICE Remote Konsole"
@@ -159,6 +158,10 @@ export default function VmDetailsPage() {
                     </CardContent>
                 </Card>
             </Grid>
+            
+            </Grid>
+
+
         </Box>
     );
 }
