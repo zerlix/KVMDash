@@ -146,7 +146,7 @@ export default function VmDetailsPage() {
                     <CardContent>
                         {vmDetails.spice.port ? (
                             <SpiceViewer
-                                host={vmDetails.spice.listen}
+                                host="192.168.0.200"
                                 port={parseInt(vmDetails.spice.port) + 1000}
                             // Optional: Wenn Sie ein Passwort haben
                             // password="your-password"
