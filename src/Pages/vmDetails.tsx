@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, CardHeader, CardContent } from '@mui/material';
-import { Container, Typography, Chip, List, ListItem, ListItemText, Box } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Typography, List, ListItem, ListItemText, Chip } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import ComputerIcon from '@mui/icons-material/Computer';
 import MemoryIcon from '@mui/icons-material/Memory';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
@@ -32,7 +30,7 @@ interface VmDetails {
     }>;
 }
 
-const VmDetailsPage: React.FC = () => {
+export default function VmDetailsPage() {
     const { vmName } = useParams<{ vmName: string }>();
     const [vmDetails, setVmDetails] = useState<VmDetails | null>(null);
     const [loading, setLoading] = useState(true);
@@ -64,8 +62,7 @@ const VmDetailsPage: React.FC = () => {
 
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
-            <Grid container spacing={3}>
-                {/* System Info Card */}
+            <Grid container spacing={2}>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Card elevation={3}>
                         <CardHeader
@@ -74,34 +71,19 @@ const VmDetailsPage: React.FC = () => {
                             titleTypographyProps={{ variant: 'h6' }}
                         />
                         <CardContent>
-                            <List>
-                                <ListItem>
-                                    <ListItemText 
-                                        primary="Architektur"
-                                        secondary={`${vmDetails.os.arch} (${vmDetails.os.type})`}
-                                        primaryTypographyProps={{ fontWeight: 'medium' }}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText 
-                                        primary="RAM"
-                                        secondary={`${parseInt(vmDetails.memory) / 1024 / 1024} GB`}
-                                        primaryTypographyProps={{ fontWeight: 'medium' }}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText 
-                                        primary="vCPUs"
-                                        secondary={vmDetails.vcpu}
-                                        primaryTypographyProps={{ fontWeight: 'medium' }}
-                                    />
-                                </ListItem>
-                            </List>
+                            <Typography variant="body2" color="text.secondary">
+                                Architektur: {vmDetails.os.arch} ({vmDetails.os.type})
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                RAM: {(parseInt(vmDetails.memory) / 1024 / 1024).toFixed(1)} GB
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                vCPUs: {vmDetails.vcpu}
+                            </Typography>
                         </CardContent>
                     </Card>
                 </Grid>
 
-                {/* Network Info Card */}
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Card elevation={3}>
                         <CardHeader
@@ -111,14 +93,11 @@ const VmDetailsPage: React.FC = () => {
                         />
                         <CardContent>
                             {vmDetails.network.map((net, index) => (
-                                <Box key={index} sx={{ mb: 2, '&:last-child': { mb: 0 } }}>
-                                    <Typography variant="subtitle1" sx={{ fontWeight: 'medium', mb: 1 }}>
-                                        {net.name}
+                                <Box key={index} sx={{ mb: 2 }}>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {net.name} - MAC: {net.hardware_address}
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                                        MAC: {net.hardware_address}
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
                                         {net.ip_addresses.map((ip, ipIndex) => (
                                             <Chip
                                                 key={ipIndex}
@@ -135,7 +114,6 @@ const VmDetailsPage: React.FC = () => {
                     </Card>
                 </Grid>
 
-                {/* SPICE Info Card */}
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Card elevation={3}>
                         <CardHeader
@@ -144,28 +122,16 @@ const VmDetailsPage: React.FC = () => {
                             titleTypographyProps={{ variant: 'h6' }}
                         />
                         <CardContent>
-                            <List>
-                                <ListItem>
-                                    <ListItemText 
-                                        primary="Port"
-                                        secondary={vmDetails.spice.port}
-                                        primaryTypographyProps={{ fontWeight: 'medium' }}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText 
-                                        primary="Listen Address"
-                                        secondary={vmDetails.spice.listen}
-                                        primaryTypographyProps={{ fontWeight: 'medium' }}
-                                    />
-                                </ListItem>
-                            </List>
+                            <Typography variant="body2" color="text.secondary">
+                                Port: {vmDetails.spice.port}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Listen Address: {vmDetails.spice.listen}
+                            </Typography>
                         </CardContent>
                     </Card>
                 </Grid>
             </Grid>
         </Box>
     );
-};
-
-export default VmDetailsPage;
+}
