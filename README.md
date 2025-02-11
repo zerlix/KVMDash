@@ -18,8 +18,8 @@ Ein Linux-System mit:
 * Instaliertem KVMDash-API - https://github.com/zerlix/KVMDash-API
 
 ## Videos
-[![YouTube Video](https://img.youtube.com/vi/MWDK3TcuIK4/0.jpg)](https://www.youtube.com/watch?v=MWDK3TcuIK4)
-[![YouTube Video](https://img.youtube.com/vi/vl9TnEngGHs/0.jpg)](https://www.youtube.com/watch?v=vl9TnEngGHs)
+[![YouTube Video](https://img.youtube.com/vi/bIJdHC3julM/0.jpg)](https://www.youtube.com/watch?v=bIJdHC3julM)
+
 
 ## Installation
  TODO....
