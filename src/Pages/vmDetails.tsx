@@ -6,6 +6,9 @@ import MemoryIcon from '@mui/icons-material/Memory';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 import { fetchData } from '../services/apiService';
+import { SpiceViewer } from '../Components/SpiceViewer';
+
+
 
 interface VmDetails {
     name: string;
@@ -131,6 +134,30 @@ export default function VmDetailsPage() {
                         </CardContent>
                     </Card>
                 </Grid>
+            </Grid>
+
+            <Grid size={{ xs: 12 }}>
+                <Card elevation={3}>
+                    <CardHeader
+                        title="SPICE Remote Konsole"
+                        avatar={<DisplaySettingsIcon color="primary" />}
+                        titleTypographyProps={{ variant: 'h6' }}
+                    />
+                    <CardContent>
+                        {vmDetails.spice.port ? (
+                            <SpiceViewer
+                                host={vmDetails.spice.listen}
+                                port={parseInt(vmDetails.spice.port) + 1000}
+                            // Optional: Wenn Sie ein Passwort haben
+                            // password="your-password"
+                            />
+                        ) : (
+                            <Typography variant="body2" color="text.secondary">
+                                Keine SPICE Verbindung verfügbar
+                            </Typography>
+                        )}
+                    </CardContent>
+                </Card>
             </Grid>
         </Box>
     );
