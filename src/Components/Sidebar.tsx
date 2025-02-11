@@ -134,19 +134,26 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                     </ListItemButton>
                 </ListItem>
 
+
                 {/* Vm´s Link List */}
-                {open && ( // Collapse nur rendern, wenn die Sidebar geöffnet ist
+                {open && (
                     <Collapse in={openVm} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                                {Object.entries(vmList).map(([vmName, vmData]) => (
-                                    <ListItem key={vmName}>
+                            {Object.entries(vmList).map(([vmName, vmData]) => (
+                                <ListItem key={vmName} disablePadding>
+                                    <ListItemButton
+                                        component={Link}
+                                        to={`/vm/${vmName}`}
+                                        sx={{ pl: 4 }}
+                                    >
                                         <ListItemIcon>
                                             <ComputerIcon sx={{ color: getVmStatusColor(vmData) }} />
                                         </ListItemIcon>
                                         <ListItemText primary={vmName} />
-                                    </ListItem>
-                                ))}
-                            </List>
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
                     </Collapse>
                 )}
 
