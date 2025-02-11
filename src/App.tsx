@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { useMediaQuery } from '@mui/material';
 import Navbar from './Components/Navbar';
 import SideBar from './Components/Sidebar';
+import VmDetailsPage from './Pages/vmDetails';
 
 // Routes
 import Home from './Pages/home';
@@ -64,6 +65,7 @@ export default function App() {
                             <Routes>
                                 <Route path="/" element={<Home />} />
                                 <Route path="/vm" element={<Vm />} />
+                                <Route path="/vm/:vmName" element={<VmDetailsPage />} />
                                 <Route path="/settings" element={<Settings />} />
                                 <Route path="*" element={<Navigate to="/" />} />
                             </Routes>
