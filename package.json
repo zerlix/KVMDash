@@ -23,7 +23,10 @@
     "@mui/types": "^7.2.21",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/parser": "^8.24.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.20.1",
     "typescript": "latest",
     "vite": "^6.0.10"
   }

@@ -1,19 +1,7 @@
-import { Typography, Container, Box, Paper } from '@mui/material';
-import { SpiceViewer } from '../Components/SpiceViewer';
-import { useEffect } from 'react';
+import { FC, ReactElement } from 'react';
+import { Typography, Container, Box } from '@mui/material';
 
-export default function SettingsContent() {
-  // Cleanup bei Unmount
-  useEffect(() => {
-    return () => {
-      // Optional: Globales Cleanup
-      const spiceArea = document.getElementById('spice-area');
-      const messageDiv = document.getElementById('message-div');
-      if (spiceArea) spiceArea.remove();
-      if (messageDiv) messageDiv.remove();
-    };
-  }, []);
-
+const SettingsContent: FC = (): ReactElement => {
   return (
     <Container 
       disableGutters 
@@ -23,7 +11,14 @@ export default function SettingsContent() {
         width: '100%',
       }}
     >
-    Todo settings...
+      <Typography variant="h4" component="h1">
+        Einstellungen
+      </Typography>
+      <Box mt={3}>
+        {/* TODO: Einstellungen implementieren */}
+      </Box>
     </Container>
   );
-}
+};
+
+export default SettingsContent;
