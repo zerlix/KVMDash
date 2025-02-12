@@ -26,7 +26,7 @@
 Ein Linux-System mit:
 * Installiertem KVM (Kernel-based Virtual Machine).
 * Installiertem libvirt für die Verwaltung von Virtualisierungsressourcen.
-* Instaliertem KVMDash-API - https://github.com/zerlix/KVMDash-API
+* Installiertem KVMDash-API - https://github.com/zerlix/KVMDash-API
 
 ## Videos
 
