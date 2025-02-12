@@ -26,8 +26,5 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 ## Installation
  TODO....
 
-Nach erfolgreicher Installation muss User "www-data" der Gruppe libvirt und kvm hinzugefügt werden.
-```bash
-usermod -aG libvirt,kvm www-data
-```
+
 
