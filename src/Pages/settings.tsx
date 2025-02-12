@@ -23,22 +23,7 @@ export default function SettingsContent() {
         width: '100%',
       }}
     >
-      <Typography variant="h5" gutterBottom>
-        SPICE Terminal Test
-      </Typography>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          p: 2,
-          backgroundColor: '#f5f5f5' 
-        }}
-      >
-        <SpiceViewer
-          host="192.168.0.200"
-          port={6080}
-          password="optional-password"
-        />
-      </Paper>
+    Todo settings...
     </Container>
   );
 }
