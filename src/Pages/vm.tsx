@@ -6,6 +6,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { fetchVmList } from '../services/vmService';
 import { fetchData } from '../services/apiService';
+import { CreateVmForm, VmFormData } from '../Components/CreateVmForm';
 
 interface VmData {
     [key: string]: {
@@ -66,6 +67,33 @@ export default function VmContent() {
         }
     };
 
+    const handleCreateVm = async (formData: VmFormData) => {
+        console.log('handleCreateVm called with:', formData);
+        setLoading('new-vm');
+        setError(null);
+    
+        try {
+            const response = await fetchData('qemu/create', {
+                method: 'POST',
+                body: JSON.stringify(formData)  // Direkt die formData senden, ohne data-Wrapper
+            });
+            console.log('API Response:', response);
+    
+            if (response.status === 'error') {
+                throw new Error(response.message);
+            }
+    
+            // VM-Liste aktualisieren
+            const data = await fetchVmList();
+            setVms(data);
+        } catch (err: any) {
+            console.error('Create VM Error:', err);
+            setError(`VM konnte nicht erstellt werden: ${err.message}`);
+        } finally {
+            setLoading('');
+        }
+    };
+
     // Status Funktionen
     const getStatusColor = (state: string) => {
         return state === '1' ? 'success' : 'error';
@@ -86,6 +114,9 @@ export default function VmContent() {
                 <Typography color="error">{error}</Typography>
             ) : (
                 <Grid container spacing={2}>
+                    <Grid size={{ xs: 12}} >
+                        <CreateVmForm onSubmit={handleCreateVm} />
+                    </Grid>
                     {Object.entries(vms).map(([vmName, vmData]) => (
                         <Grid size={{ xs: 12, sm: 6, md: 4 }} key={vmName}>
                             <Card elevation={3}>
