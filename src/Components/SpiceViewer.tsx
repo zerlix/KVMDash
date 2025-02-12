@@ -22,8 +22,9 @@ const createSpiceDisplay = (container: HTMLDivElement) => {
     display.id = 'spice-area';
     Object.assign(display.style, {
         position: 'absolute',
-        top: '0',
-        left: '0',
+        top: '50%',               // Vertikale Zentrierung
+        left: '50%',             // Horizontale Zentrierung
+        transform: 'translate(-50%, -50%)', // Perfekte Zentrierung
         width: '100%',
         height: '100%'
     });
@@ -208,13 +209,14 @@ export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
         <div
             ref={containerRef}
             style={{
-                width: '1024px',
-                height: '768px',
+                width: '100%',
+                height: '800px',          // Feste Höhe statt 100vh
+                maxWidth: '1280px',       // Kleinere max-width
                 border: '1px solid #ccc',
                 overflow: 'hidden',
                 backgroundColor: '#000',
                 position: 'relative',
-                margin: '0 auto'
+                margin: '0 auto'          // Nur horizontale Zentrierung
             }}
         />
     );
