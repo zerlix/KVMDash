@@ -1,18 +1,4 @@
-
-interface ApiResponse<T = unknown> {
-    status: 'success' | 'error';
-    data: T;
-    message?: string;
-}
-
-
-interface RequestOptions {
-    method?: string;
-    body?: string;
-    headers?: {
-        [key: string]: string;
-    };
-}
+import type { ApiResponse, RequestOptions } from '../types/api.types';    
 
 export const fetchData = async <T>(endpoint: string, options: RequestOptions = { method: 'GET' }): Promise<ApiResponse<T>> => {
     const token = localStorage.getItem('token');
