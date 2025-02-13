@@ -36,8 +36,9 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 
 ## Installation
  
- 
+
 **API Endpoint konfiguration**
+
 In der Datei .env muss die VITE_API_URL auf den API Host zeigen
 
 ```bash
