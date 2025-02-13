@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, JSX } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Card, CardContent, CardHeader, Typography, List, ListItem, ListItemText, Chip } from '@mui/material';
+
+import { Box, Card, CardContent, CardHeader, Typography, Chip } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import MemoryIcon from '@mui/icons-material/Memory';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
+
 import { fetchData } from '../services/apiService';
 import { SpiceViewer } from '../Components/SpiceViewer';
 
@@ -33,23 +35,22 @@ interface VmDetails {
     }>;
 }
 
-export default function VmDetailsPage() {
+export default function VmDetailsPage(): JSX.Element {
     const { vmName } = useParams<{ vmName: string }>();
     const [vmDetails, setVmDetails] = useState<VmDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchVmDetails = async () => {
+        const fetchVmDetails = async () : Promise<void> =>  {
             try {
-                const data = await fetchData(`qemu/listdetails/${vmName}`);
+                const data = await fetchData<VmDetails>(`qemu/listdetails/${vmName}`);
                 if (data.status === 'success') {
                     setVmDetails(data.data);
                 } else {
                     throw new Error(data.message || 'Fehler beim Laden der VM Details');
                 }
             } catch (err) {
-                console.error('VM Details Fehler:', err);
                 setError(err instanceof Error ? err.message : 'Unbekannter Fehler');
             } finally {
                 setLoading(false);
