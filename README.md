@@ -37,5 +37,20 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 ## Installation
  TODO....
 
+### API Endpoint konfiguration
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 80,
+    proxy: {
+      '/api': {
+        target: 'http://kvmdash.back',
+        changeOrigin: true
+      }
+    }
+  }
+});
 
 

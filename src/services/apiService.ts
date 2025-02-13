@@ -21,8 +21,8 @@ export const fetchData = async <T>(endpoint: string, options: RequestOptions = {
         throw new Error('Nicht authentifiziert');
     }
 
-
-    const response = await fetch(`http://kvmdash.back/api/${endpoint}`, {
+    const apiUrl = `${import.meta.env.VITE_API_URL}/${endpoint}`;
+    const response = await fetch(apiUrl, {
         method: options.method,
         headers: {
             'Authorization': token,
@@ -48,3 +48,4 @@ export const fetchData = async <T>(endpoint: string, options: RequestOptions = {
 
     return data;
 };
+

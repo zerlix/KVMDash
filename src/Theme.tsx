@@ -1,7 +1,9 @@
+import { JSX } from 'react';
+
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider, CssBaseline } from '@mui/material';
+
 import App from './App';
-import { JSX } from 'react';
 
 // Theme Konstanten
 const themeColors = {

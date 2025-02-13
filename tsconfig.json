@@ -1,36 +1,20 @@
 {
     "compilerOptions": {
-      // Legt die JavaScript-Version fest, auf die TypeScript kompiliert wird. "ESNext" bedeutet die neueste Version von ECMAScript.
       "target": "ESNext",
-      // Verwendet die neueste Syntax für Klassenfelder.
       "useDefineForClassFields": true,
-      // Gibt die Bibliotheken an, die in das Projekt eingebunden werden. Hier sind es die DOM-APIs und die neueste ECMAScript-Version.
       "lib": ["DOM", "DOM.Iterable", "ESNext"],
-      // Erlaubt das Kompilieren von JavaScript-Dateien. Hier ist es deaktiviert.
       "allowJs": false,
-      // Überspringt die Typprüfung von Bibliotheksdateien, um die Kompilierzeit zu verkürzen.
       "skipLibCheck": true,
-      // Ermöglicht den Import von CommonJS-Modulen mit `import`-Syntax. Hier ist es deaktiviert.
       "esModuleInterop": false,
-      // Erlaubt den Import von Modulen, die keinen Standardexport haben, als ob sie einen hätten.
       "allowSyntheticDefaultImports": true,
-      // Aktiviert alle strikten Typprüfungen.
       "strict": true,
-      // Erzwingt konsistente Groß- und Kleinschreibung in Dateinamen.
       "forceConsistentCasingInFileNames": true,
-      // Legt das Modulformat fest, auf das TypeScript kompiliert wird. "ESNext" bedeutet die neueste Version von ECMAScript-Modulen.
       "module": "ESNext",
-      // Legt die Modulauflösungsstrategie fest. "Node" bedeutet, dass die Node.js-Modulauflösung verwendet wird.
       "moduleResolution": "Node",
-      // Erlaubt das Importieren von JSON-Dateien.
       "resolveJsonModule": true,
-      // Erzwingt die Isolation von Modulen, was für die Verwendung mit Babel oder anderen Transpilern nützlich ist.
       "isolatedModules": true,
-      // Verhindert das Ausgeben von JavaScript-Dateien. TypeScript wird nur für die Typprüfung verwendet.
       "noEmit": true,
-      // Legt fest, wie JSX in JavaScript umgewandelt wird. "react-jsx" ist die neueste JSX-Transformationsmethode von React.
       "jsx": "react-jsx"
     },
-    // Gibt die Verzeichnisse an, die in das Projekt einbezogen werden. Hier ist es das "src"-Verzeichnis.
     "include": ["src"]
-  }
+}
