@@ -30,8 +30,9 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     const [openVm, setOpenVm] = useState(false);
     const [vmList, setVmList] = useState<any[]>([]);
+    const [error, setError] = useState<string>('');
 
-    const handleVmClick = () => {
+    const handleVmClick = (): void => {
         if (!open) {
             toggleDrawer(); // Sidebar ausfahren, wenn sie geschlossen ist
         }
@@ -39,21 +40,21 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (): Promise<void> => {
             try {
                 const data = await fetchVmList();
                 setVmList(data);
             } catch (err: any) {
-                console.error(err.message);
+                setError(err.message);
             }
         };
         fetchData();
         const interval = setInterval(fetchData, 5000);
-        return () => clearInterval(interval);
+        return (): void => clearInterval(interval);
     }, []);
 
     // Funktion um die Farbe des ComputerIcons zu bestimmen
-    const getVmStatusColor = (vmData: any) => {
+    const getVmStatusColor = (vmData: any) : string => {
         return vmData['state.state'] === '1' ? 'green' : 'grey';
     };
 
@@ -139,6 +140,15 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                 {open && (
                     <Collapse in={openVm} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
+                            {error && (
+                                <ListItem>
+                                    <ListItemText
+                                        primary="Fehler"
+                                        secondary={error}
+                                        sx={{ color: 'error.main' }}
+                                    />
+                                </ListItem>
+                            )}
                             {Object.entries(vmList).map(([vmName, vmData]) => (
                                 <ListItem key={vmName} disablePadding>
                                     <ListItemButton
