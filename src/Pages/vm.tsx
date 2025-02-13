@@ -1,12 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Box, Card, CardContent, CardHeader, Typography, Chip, IconButton, CardActions, CircularProgress } from '@mui/material';
+import { useState, useEffect, JSX } from 'react';
+
+import { Box, Card, CardContent, CardHeader, Typography, 
+        Chip, IconButton, CardActions, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+
+import { CreateVmForm, VmFormData } from '../Components/CreateVmForm';
+
 import { fetchVmList } from '../services/vmService';
 import { fetchData } from '../services/apiService';
-import { CreateVmForm, VmFormData } from '../Components/CreateVmForm';
+
 
 interface VmData {
     [key: string]: {
@@ -17,7 +23,7 @@ interface VmData {
     }
 }
 
-export default function VmContent() {
+export default function VmContent(): JSX.Element {
 
     const [vms, setVms] = useState<VmData>({});
     const [error, setError] = useState<string | null>(null);
@@ -60,7 +66,6 @@ export default function VmContent() {
                 await new Promise(resolve => setTimeout(resolve, 5000));
             }
         } catch (err: any) {
-            console.error(`VM ${action} Fehler:`, err);
             setError(`VM Aktion fehlgeschlagen: ${err.message}`);
         } finally {
             setLoading('');
@@ -68,7 +73,6 @@ export default function VmContent() {
     };
 
     const handleCreateVm = async (formData: VmFormData) => {
-        console.log('handleCreateVm called with:', formData);
         setLoading('new-vm');
         setError(null);
     
@@ -77,8 +81,7 @@ export default function VmContent() {
                 method: 'POST',
                 body: JSON.stringify(formData)  // Direkt die formData senden, ohne data-Wrapper
             });
-            console.log('API Response:', response);
-    
+           
             if (response.status === 'error') {
                 throw new Error(response.message);
             }
@@ -87,7 +90,6 @@ export default function VmContent() {
             const data = await fetchVmList();
             setVms(data);
         } catch (err: any) {
-            console.error('Create VM Error:', err);
             setError(`VM konnte nicht erstellt werden: ${err.message}`);
         } finally {
             setLoading('');

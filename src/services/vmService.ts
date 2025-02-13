@@ -8,7 +8,7 @@ interface VmData {
 
 export const fetchVmList = async (): Promise<VmData[]> => {
     try {
-        const response = await fetchData('qemu/list');
+        const response = await fetchData<VmData[]>('qemu/list');
         if (response.status === 'success') {
             return response.data;
         } else {
