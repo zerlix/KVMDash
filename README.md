@@ -39,18 +39,10 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 
 ### API Endpoint konfiguration
 
-```javascript
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 80,
-    proxy: {
-      '/api': {
-        target: 'http://kvmdash.back',
-        changeOrigin: true
-      }
-    }
-  }
-});
+In der Datei .env die VITE_API_URL festlegen
+
+```bash
+VITE_API_URL=http://kvmdash.back/api
+```
 
 
