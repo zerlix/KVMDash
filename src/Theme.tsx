@@ -3,6 +3,8 @@ import { createTheme } from '@mui/material/styles';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import App from './App';
 
+const DRAWER_WIDTH = 240;
+const DRAWER_MINI_WIDTH = 64;
 
 // Theme Konstanten
 const themeColors = {
@@ -41,10 +43,10 @@ const theme = createTheme({
         MuiDrawer: {
             styleOverrides: {
                 root: {
-                    width: '240px',
+                    width: `${DRAWER_WIDTH}px`,
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: '240px',
+                        width: `${DRAWER_WIDTH}px`,
                         boxSizing: 'border-box',
                         overflowX: 'hidden',
                         transition: 'width 0.3s',
@@ -161,6 +163,17 @@ export const logoStyles = {
             height: 'auto',
             transition: 'width 0.3s, max-width 0.3s'
         }
+    }
+};
+
+/*
+ * Main Content Styles
+ */
+export const layoutStyles = {
+    mainContent: {
+        // ...existing code...
+        width: (isOpen: boolean): string => 
+            `calc(100% - ${isOpen ? DRAWER_WIDTH : DRAWER_MINI_WIDTH}px)`
     }
 };
 
