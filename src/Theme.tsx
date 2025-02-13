@@ -1,9 +1,8 @@
 import { JSX } from 'react';
-
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-
 import App from './App';
+
 
 // Theme Konstanten
 const themeColors = {
@@ -32,6 +31,8 @@ const themeColors = {
     }
 };
 
+
+// MUI Theme styles
 const theme = createTheme({
     palette: themeColors,
     components: {
@@ -129,6 +130,11 @@ const theme = createTheme({
         }
     }
 });
+
+
+/*
+ * Sidebar Styles
+ */
 
 // Sidebar close icon
 export const drawerControlIcon = {
