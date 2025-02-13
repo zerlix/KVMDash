@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Divider, Toolbar, Collapse } from '@mui/material';
+import { List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Divider, Toolbar, Collapse } from '@mui/material';
+import { logoStyles, drawerControlIcon } from '../Theme';
 
 // MUI 
 import Drawer from '@mui/material/Drawer';
@@ -54,46 +55,30 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     }, []);
 
     // Funktion um die Farbe des ComputerIcons zu bestimmen
-    const getVmStatusColor = (vmData: any) : string => {
+    const getVmStatusColor = (vmData: any): string => {
         return vmData['state.state'] === '1' ? 'green' : 'grey';
     };
 
     return (
-
-
         <Drawer
             variant="permanent"
             anchor="left"
             open={open}
             sx={{
                 width: open ? drawerWidth : '64px',
-                flexShrink: 0,
                 '& .MuiDrawer-paper': {
-                    width: open ? drawerWidth : '64px',
-                    boxSizing: 'border-box',
-                    overflowX: 'hidden',
-                    transition: 'width 0.3s',
-                    boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.5)',
-                },
+                    width: open ? drawerWidth : '64px'
+                }
             }}
         >
             {/* Toolbar mit Logo */}
-            <Toolbar
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
+            <Toolbar>
                 <img
                     src={KvmLogo}
                     alt="Logo"
                     style={{
-                        width: open ? '100%' : '50%',
-                        maxWidth: open ? '100px' : '32px',
-                        minWidth: '32px', // Mindestbreite für das Logo
-                        height: 'auto',
-                        transition: 'width 0.3s, max-width 0.3s'
+                        ...logoStyles.logoTransition.common,
+                        ...(open ? logoStyles.logoTransition.open : logoStyles.logoTransition.closed)
                     }}
                 />
             </Toolbar>
@@ -101,15 +86,11 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
             <Divider />
 
             {/* Drawer Close Icon */}
-            <div style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                padding: '8px'
-            }}>
+            <Box sx={drawerControlIcon.container}>
                 <IconButton onClick={toggleDrawer}>
                     {open ? <ChevronLeftIcon /> : <MenuIcon />}
                 </IconButton>
-            </div>
+            </Box>
 
             {/* Menubar */}
             <List>

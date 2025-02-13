@@ -35,6 +35,34 @@ const themeColors = {
 const theme = createTheme({
     palette: themeColors,
     components: {
+
+        // Sidebar
+        MuiDrawer: {
+            styleOverrides: {
+                root: {
+                    width: '240px',
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: '240px',
+                        boxSizing: 'border-box',
+                        overflowX: 'hidden',
+                        transition: 'width 0.3s',
+                        boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.5)',
+                    }
+                }
+            }
+        },
+        MuiToolbar: {
+            styleOverrides: {
+                root: {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }
+            }
+        },
+
+        // Cards
         MuiCard: {
             styleOverrides: {
                 root: {
@@ -53,6 +81,7 @@ const theme = createTheme({
             }
         },
 
+        
         MuiListItem: {
             styleOverrides: {
                 root: {
@@ -101,7 +130,36 @@ const theme = createTheme({
     }
 });
 
-export function ThemedApp() :JSX.Element {
+// Sidebar close icon
+export const drawerControlIcon = {
+    container: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: '8px'
+    }
+};
+
+// logo sidebar
+export const logoStyles = {
+    logoTransition: {
+        open: {
+            width: '100%',
+            maxWidth: '100px',
+        },
+        closed: {
+            width: '50%',
+            maxWidth: '32px',
+        },
+        common: {
+            minWidth: '32px',
+            height: 'auto',
+            transition: 'width 0.3s, max-width 0.3s'
+        }
+    }
+};
+
+
+export function ThemedApp(): JSX.Element {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
