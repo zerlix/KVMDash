@@ -11,7 +11,6 @@ import { fetchData } from '../services/apiService';
 import { SpiceViewer } from '../Components/SpiceViewer';
 
 
-
 interface VmDetails {
     name: string;
     memory: string;
@@ -42,7 +41,7 @@ export default function VmDetailsPage(): JSX.Element {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchVmDetails = async () : Promise<void> =>  {
+        const fetchVmDetails = async (): Promise<void> => {
             try {
                 const data = await fetchData<VmDetails>(`qemu/listdetails/${vmName}`);
                 if (data.status === 'success') {
@@ -70,9 +69,8 @@ export default function VmDetailsPage(): JSX.Element {
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Card elevation={3}>
                         <CardHeader
-                            title="System"
+                            title={<Typography variant="h6">System</Typography>}
                             avatar={<MemoryIcon color="primary" />}
-                            titleTypographyProps={{ variant: 'h6' }}
                         />
                         <CardContent>
                             <Typography variant="body2" color="text.secondary">
@@ -91,9 +89,8 @@ export default function VmDetailsPage(): JSX.Element {
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Card elevation={3}>
                         <CardHeader
-                            title="Netzwerk"
+                            title={<Typography variant="h6">Netzwerk</Typography>}
                             avatar={<NetworkCheckIcon color="primary" />}
-                            titleTypographyProps={{ variant: 'h6' }}
                         />
                         <CardContent>
                             {vmDetails.network.map((net, index) => (
@@ -121,9 +118,8 @@ export default function VmDetailsPage(): JSX.Element {
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Card elevation={3}>
                         <CardHeader
-                            title="SPICE Verbindung"
+                            title={<Typography variant="h6">SPICE Verbindung</Typography>}
                             avatar={<DisplaySettingsIcon color="primary" />}
-                            titleTypographyProps={{ variant: 'h6' }}
                         />
                         <CardContent>
                             <Typography variant="body2" color="text.secondary">
@@ -137,32 +133,26 @@ export default function VmDetailsPage(): JSX.Element {
                 </Grid>
 
                 <Grid size={{ xs: 12 }}>
-                <Card elevation={3}>
-                    <CardHeader
-                        title="SPICE Remote Konsole"
-                        avatar={<DisplaySettingsIcon color="primary" />}
-                        titleTypographyProps={{ variant: 'h6' }}
-                    />
-                    <CardContent>
-                        {vmDetails.spice.port ? (
-                            <SpiceViewer
-                                host="192.168.0.200"
-                                port={parseInt(vmDetails.spice.port) + 1000}
-                            // Optional: Wenn Sie ein Passwort haben
-                            // password="your-password"
-                            />
-                        ) : (
-                            <Typography variant="body2" color="text.secondary">
-                                Keine SPICE Verbindung verfügbar
-                            </Typography>
-                        )}
-                    </CardContent>
-                </Card>
+                    <Card elevation={3}>
+                        <CardHeader
+                            title={<Typography variant="h6">SPICE Remote Konsole</Typography>}
+                            avatar={<DisplaySettingsIcon color="primary" />}
+                        />
+                        <CardContent>
+                            {vmDetails.spice.port ? (
+                                <SpiceViewer
+                                    host="192.168.0.200"
+                                    port={parseInt(vmDetails.spice.port) + 1000}
+                                />
+                            ) : (
+                                <Typography variant="body2" color="text.secondary">
+                                    Keine SPICE Verbindung verfügbar
+                                </Typography>
+                            )}
+                        </CardContent>
+                    </Card>
+                </Grid>
             </Grid>
-            
-            </Grid>
-
-
         </Box>
     );
 }
