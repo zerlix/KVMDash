@@ -1,6 +1,12 @@
 import { fetchData } from './apiService';
 
-export const fetchVmList = async () => {
+interface VmData {
+    name: string;
+    state: string;
+    id: number;
+}
+
+export const fetchVmList = async (): Promise<VmData[]> => {
     try {
         const response = await fetchData('qemu/list');
         if (response.status === 'success') {
