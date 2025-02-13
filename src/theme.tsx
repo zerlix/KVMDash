@@ -1,6 +1,7 @@
-import { createTheme, Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import App from './App';
+import { JSX } from 'react';
 
 // Theme Konstanten
 const themeColors = {
@@ -98,7 +99,7 @@ const theme = createTheme({
     }
 });
 
-export function ThemedApp() {
+export function ThemedApp() :JSX.Element {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
