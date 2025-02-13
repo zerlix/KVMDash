@@ -35,11 +35,10 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 
 
 ## Installation
- TODO....
-
-### API Endpoint konfiguration
-
-In der Datei .env die VITE_API_URL festlegen
+ 
+ 
+**API Endpoint konfiguration**
+In der Datei .env muss die VITE_API_URL auf den API Host zeigen
 
 ```bash
 VITE_API_URL=http://kvmdash.back/api
