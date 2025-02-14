@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import HostInfo from '../components/HostInfo';
 import CpuInfo from '../components/CpuInfo';
 import DiskInfo from '../components/DiskInfo'
-//import MemInfo from '../Components/MemInfo';
+import MemInfo from '../components/MemInfo';
 
 // Home Page
 export default function HomeContent(): JSX.Element {
@@ -17,7 +17,7 @@ export default function HomeContent(): JSX.Element {
                     <HostInfo />
                 </Grid>
                 <Grid sx={{ xs: 12, md: 6 }}>
-                    {/* <MemInfo />*/}
+                    <MemInfo />
                 </Grid>
                 <Grid sx={{ xs: 12, md: 6 }}>
                     <DiskInfo />
