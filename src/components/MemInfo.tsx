@@ -57,7 +57,7 @@ const MemInfoCard = (): JSX.Element => {
     }
 
     if (!memData) {
-        return null;
+        return <></>;
     }
 
     const totalGB = convertToGB(memData.total);
