@@ -2,16 +2,8 @@ import { Box, Card, CardHeader, Typography, CardContent, CircularProgress } from
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState, JSX } from 'react';
 import { fetchData } from '../services/apiService';
+import { SystemInfo } from '../types/system.types';
 
-// Definiere API Datenstruktur
-interface SystemInfo {
-    Hostname: string;
-    KernelName: string;
-    KernelRelease: string;
-    OperatingSystemPrettyName: string;
-    HardwareVendor: string;
-    HardwareModel: string;
-}
 
 export default function HostInfo(): JSX.Element {
     // State Management
