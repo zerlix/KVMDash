@@ -9,7 +9,7 @@ import Login from './pages/login';
 import Home from './pages/home';
 //import Vm from './Pages/vm';
 //import VmDetailsPage from './Pages/vmDetails';
-//import Settings from './Pages/settings';
+import Settings from './pages/settings';
 
 import { layoutStyles } from './Theme';
 
@@ -67,9 +67,9 @@ export default function App(): JSX.Element {
                                 <Route path="*" element={<Navigate to="/" />} />
                                 {/*
                                 <Route path="/vm" element={<Vm />} />
-                                <Route path="/vm/:vmName" element={<VmDetailsPage />} />
+                                <Route path="/vm/:vmName" element={<VmDetailsPage />} />*/}
                                 <Route path="/settings" element={<Settings />} />
-                                 */}
+                                 
                             </Routes>
                         </main>
                     </Box>
