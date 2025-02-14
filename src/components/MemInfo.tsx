@@ -106,9 +106,6 @@ const MemInfoCard = (): JSX.Element => {
                                         }}
                                     />
                                 </Box>
-                                <Typography variant="body2" sx={{ minWidth: 45 }}>
-                                    {memData.used}
-                                </Typography>
                             </Box>
                             <Typography variant="body2">
                                 Verfügbar: {availableGB} GiB (Gesamt: {totalGB} GiB, Belegt: {usedGB} GiB)
