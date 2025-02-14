@@ -33,15 +33,26 @@ export default function VmContent(): JSX.Element {
     useEffect((): (() => void) => {
         const fetchData = async (): Promise<void> => {  
             try {
-                const data = await fetchVmList();
-                setVms(data);
+                const vmList = await fetchVmList();
+                // Konvertiere die API-Antwort in das richtige Format
+                const formattedData: VmData = {};
+                Object.entries(vmList).forEach(([name, data]: [string, any]) => {
+                    formattedData[name] = {
+                        'state.state': data['state.state'],
+                        'state.reason': data['state.reason'],
+                        'balloon.current': data['balloon.current'],
+                        'vcpu.current': data['vcpu.current']
+                    };
+                });
+                setVms(formattedData);
             } catch (err: any) {
                 setError(err.message);
             }
         };
+        
         fetchData();
         const interval = setInterval(fetchData, 5000);
-        return () => clearInterval(interval);
+        return (): void => clearInterval(interval);
     }, []);
 
 
@@ -79,7 +90,7 @@ export default function VmContent(): JSX.Element {
         try {
             const response = await fetchData('qemu/create', {
                 method: 'POST',
-                body: JSON.stringify(formData)  // Direkt die formData senden, ohne data-Wrapper
+                body: JSON.stringify(formData)
             });
            
             if (response.status === 'error') {
@@ -87,8 +98,18 @@ export default function VmContent(): JSX.Element {
             }
     
             // VM-Liste aktualisieren
-            const data = await fetchVmList();
-            setVms(data);
+            const vmList = await fetchVmList();
+            // Konvertiere die API-Antwort in das richtige Format
+            const formattedData: VmData = {};
+            Object.entries(vmList).forEach(([name, data]: [string, any]) => {
+                formattedData[name] = {
+                    'state.state': data['state.state'],
+                    'state.reason': data['state.reason'],
+                    'balloon.current': data['balloon.current'],
+                    'vcpu.current': data['vcpu.current']
+                };
+            });
+            setVms(formattedData);
         } catch (err: any) {
             setError(`VM konnte nicht erstellt werden: ${err.message}`);
         } finally {
