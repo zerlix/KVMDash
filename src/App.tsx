@@ -8,7 +8,7 @@ import SideBar from './components/Sidebar';
 import Login from './pages/login';
 import Home from './pages/home';
 import Vm from './pages/vm';
-//import VmDetailsPage from './Pages/vmDetails';
+import VmDetailsPage from './pages/vmDetails';
 import Settings from './pages/settings';
 
 import { layoutStyles } from './Theme';
@@ -67,7 +67,7 @@ export default function App(): JSX.Element {
                                 <Route path="*" element={<Navigate to="/" />} />
                                
                                 <Route path="/vm" element={<Vm />} />
-                                 {/*<Route path="/vm/:vmName" element={<VmDetailsPage />} />*/}
+                                <Route path="/vm/:vmName" element={<VmDetailsPage />} />
                                 <Route path="/settings" element={<Settings />} />
                                  
                             </Routes>
