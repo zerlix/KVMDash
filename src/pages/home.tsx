@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import HostInfo from '../components/HostInfo';
 import CpuInfo from '../components/CpuInfo';
-//import DiskInfo from '../Components/DiskInfo'
+import DiskInfo from '../components/DiskInfo'
 //import MemInfo from '../Components/MemInfo';
 
 // Home Page
@@ -20,7 +20,7 @@ export default function HomeContent(): JSX.Element {
                     {/* <MemInfo />*/}
                 </Grid>
                 <Grid sx={{ xs: 12, md: 6 }}>
-                    {/*  <DiskInfo /> */}
+                    <DiskInfo />
                 </Grid>
                 <Grid sx={{ xs: 12, md: 6 }}>
                     <CpuInfo />
