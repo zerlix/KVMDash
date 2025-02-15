@@ -8,7 +8,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
-import { CreateVmForm, VmFormData } from '../Components/CreateVmForm';
+import { CreateVmForm, VmFormData } from '../components/CreateVmForm';
 
 import { fetchVmList } from '../services/vmService';
 import { fetchData } from '../services/apiService';
@@ -30,25 +30,36 @@ export default function VmContent(): JSX.Element {
     const [loading, setLoading] = useState<string>('');
 
 
-    useEffect(() => {
-        const fetchData = async () => {
+    useEffect((): (() => void) => {
+        const fetchData = async (): Promise<void> => {  
             try {
-                const data = await fetchVmList();
-                setVms(data);
+                const vmList = await fetchVmList();
+                // Konvertiere die API-Antwort in das richtige Format
+                const formattedData: VmData = {};
+                Object.entries(vmList).forEach(([name, data]: [string, any]) => {
+                    formattedData[name] = {
+                        'state.state': data['state.state'],
+                        'state.reason': data['state.reason'],
+                        'balloon.current': data['balloon.current'],
+                        'vcpu.current': data['vcpu.current']
+                    };
+                });
+                setVms(formattedData);
             } catch (err: any) {
                 setError(err.message);
             }
         };
+        
         fetchData();
         const interval = setInterval(fetchData, 5000);
-        return () => clearInterval(interval);
+        return (): void => clearInterval(interval);
     }, []);
 
 
     // Timeout für VM-Aktionen
     const VM_ACTION_TIMEOUT = 30000; // 30 Sekunden
 
-    const handleVmAction = async (action: string, vmName: string) => {
+    const handleVmAction = async (action: string, vmName: string): Promise<void> => {
         setLoading(vmName);
         setError(null);
 
@@ -72,14 +83,14 @@ export default function VmContent(): JSX.Element {
         }
     };
 
-    const handleCreateVm = async (formData: VmFormData) => {
+    const handleCreateVm = async (formData: VmFormData): Promise<void> => {
         setLoading('new-vm');
         setError(null);
     
         try {
             const response = await fetchData('qemu/create', {
                 method: 'POST',
-                body: JSON.stringify(formData)  // Direkt die formData senden, ohne data-Wrapper
+                body: JSON.stringify(formData)
             });
            
             if (response.status === 'error') {
@@ -87,8 +98,18 @@ export default function VmContent(): JSX.Element {
             }
     
             // VM-Liste aktualisieren
-            const data = await fetchVmList();
-            setVms(data);
+            const vmList = await fetchVmList();
+            // Konvertiere die API-Antwort in das richtige Format
+            const formattedData: VmData = {};
+            Object.entries(vmList).forEach(([name, data]: [string, any]) => {
+                formattedData[name] = {
+                    'state.state': data['state.state'],
+                    'state.reason': data['state.reason'],
+                    'balloon.current': data['balloon.current'],
+                    'vcpu.current': data['vcpu.current']
+                };
+            });
+            setVms(formattedData);
         } catch (err: any) {
             setError(`VM konnte nicht erstellt werden: ${err.message}`);
         } finally {
@@ -97,15 +118,15 @@ export default function VmContent(): JSX.Element {
     };
 
     // Status Funktionen
-    const getStatusColor = (state: string) => {
+    const getStatusColor = (state: string): "success" | "error" => {
         return state === '1' ? 'success' : 'error';
     };
 
-    const getStatusText = (state: string) => {
+    const getStatusText = (state: string): "Aktiv" | "Gestoppt" => {
         return state === '1' ? 'Aktiv' : 'Gestoppt';
     };
 
-    const formatMemory = (memoryKB: string) => {
+    const formatMemory = (memoryKB: string): string => {
         return (parseInt(memoryKB) / 1024 / 1024).toFixed(1) + ' GB';
     };
 
@@ -117,7 +138,7 @@ export default function VmContent(): JSX.Element {
             ) : (
                 <Grid container spacing={2}>
                     <Grid size={{ xs: 12}} >
-                        <CreateVmForm onSubmit={handleCreateVm} />
+                       <CreateVmForm onSubmit={handleCreateVm} />
                     </Grid>
                     {Object.entries(vms).map(([vmName, vmData]) => (
                         <Grid size={{ xs: 12, sm: 6, md: 4 }} key={vmName}>

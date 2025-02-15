@@ -38,7 +38,7 @@ const initialFormData: VmFormData = {
 export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<VmFormData>(initialFormData);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
@@ -46,9 +46,8 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
-        console.log('Form submitted:', formData);  // Debug-Ausgabe
         onSubmit(formData);
     };
 

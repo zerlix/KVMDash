@@ -1,32 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { fetchData } from '../services/apiService';
+import { CpuData } from '../types/cpu.types';
 
-interface CpuData {
-    cpu: string;
-    total: number;
-    idle: number;
-    used: number;
-    usage: number;
-}
-
-const getUsageColor = (usage: number) => {
+const getUsageColor = (usage: number): string => {
     if (usage > 80) return '#ff4444';     // Rot bei hoher Last
     if (usage > 60) return '#ffaa00';     // Orange bei mittlerer Last
     return '#00c853';                     // Grün bei niedriger Last
 };
 
-const CpuInfoCard = () => {
+const CpuInfoCard = (): JSX.Element => {
     const [cpuData, setCpuData] = useState<CpuData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchCpuInfo = async () => {
+    const fetchCpuInfo = async (): Promise<void> => {
         try {
-            const response = await fetchData('host/cpu');
+            const response = await fetchData<CpuData[]>('host/cpu');
             if (response.status === 'success') {
-                const filteredData = response.data.filter((cpu: CpuData) => cpu.cpu !== 'cpu');
+                const filteredData = response.data.filter(cpu => cpu.cpu !== 'cpu');
                 setCpuData(filteredData);
             } else {
                 setError(response.message || 'Unbekannter Fehler');
@@ -37,8 +30,7 @@ const CpuInfoCard = () => {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
+    useEffect((): (() => void) => {
         fetchCpuInfo();
         const interval = setInterval(fetchCpuInfo, 5000);
         return () => clearInterval(interval);

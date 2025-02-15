@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, JSX } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useMediaQuery } from '@mui/material';
-import Navbar from './Components/Navbar';
-import SideBar from './Components/Sidebar';
-import VmDetailsPage from './Pages/vmDetails';
+import { useMediaQuery, Box } from '@mui/material';
+
+import SideBar from './components/Sidebar';
 
 // Routes
-import Home from './Pages/home';
-import Settings from './Pages/settings';
-import Vm from './Pages/vm';
-import Login from './Pages/login';
+import Login from './pages/login';
+import Home from './pages/home';
+import Vm from './pages/vm';
+import VmDetailsPage from './pages/vmDetails';
+import Settings from './pages/settings';
 
-const drawerWidth = 240;
+import { layoutStyles } from './Theme';
 
-export default function App() {
+
+export default function App(): JSX.Element {
+
     const [open, setOpen] = useState(true);
     const isMobile = useMediaQuery('(max-width:600px)');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,7 +27,7 @@ export default function App() {
     }, [isMobile]);
 
     useEffect(() => {
-        const checkAuth = () => {
+        const checkAuth = (): void => {
             const token = localStorage.getItem('token');
             setIsLoggedIn(!!token);
         };
@@ -37,14 +39,16 @@ export default function App() {
         window.addEventListener('localStorageChanged', checkAuth);
         // Listen for changes from other tabs
         window.addEventListener('storage', checkAuth);
-        
-        return () => {
+
+        const cleanup = (): void => {
             window.removeEventListener('localStorageChanged', checkAuth);
             window.removeEventListener('storage', checkAuth);
         };
+
+        return cleanup;
     }, []);
 
-    const toggleDrawer = () => {
+    const toggleDrawer = (): void => {
         setOpen(!open);
     };
 
@@ -52,31 +56,30 @@ export default function App() {
         <Router>
             {isLoggedIn ? (
                 <>
-                    <div style={{ display: 'flex' }}>
+                    <Box sx={{ display: 'flex' }}>
                         <SideBar open={open} toggleDrawer={toggleDrawer} />
                         <main style={{
-                            flexGrow: 1,
-                            overflow: 'auto',
-                            marginTop: '64px',
-                            width: `calc(100% - ${open ? drawerWidth : 64}px)`,
-                            paddingLeft: '20px',
-                            transition: 'width 0.3s',
+                            ...layoutStyles.mainContent,
+                            width: layoutStyles.mainContent.width(open)
                         }}>
                             <Routes>
                                 <Route path="/" element={<Home />} />
+                                <Route path="*" element={<Navigate to="/" />} />
+                               
                                 <Route path="/vm" element={<Vm />} />
                                 <Route path="/vm/:vmName" element={<VmDetailsPage />} />
                                 <Route path="/settings" element={<Settings />} />
-                                <Route path="*" element={<Navigate to="/" />} />
+                                 
                             </Routes>
                         </main>
-                    </div>
+                    </Box>
                 </>
             ) : (
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="*" element={<Navigate to="/login" />} />
                 </Routes>
+
             )}
         </Router>
     );

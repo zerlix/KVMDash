@@ -1,28 +1,20 @@
-import { Box, Card, CardHeader, Typography, Paper, CardContent, CircularProgress } from '@mui/material';
+import { Box, Card, CardHeader, Typography, CardContent, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, JSX } from 'react';
 import { fetchData } from '../services/apiService';
+import { SystemInfo } from '../types/system.types';
 
-// Definiere API Datenstruktur
-interface SystemInfo {
-    Hostname: string;
-    KernelName: string;
-    KernelRelease: string;
-    OperatingSystemPrettyName: string;
-    HardwareVendor: string;
-    HardwareModel: string;
-}
 
-export default function HostInfo() {
+export default function HostInfo(): JSX.Element {
     // State Management
     const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     // API Abruf
-    const fetchSystemInfo = async () => {
+    const fetchSystemInfo = async (): Promise<void> => {
         try {
-            const response = await fetchData('host/info');
+            // Hier erwarten wir direkt SystemInfo als data Typ
+            const response = await fetchData<SystemInfo>('host/info');
             if (response.status === 'success') {
                 setSystemInfo(response.data);
                 setError(null);
@@ -30,13 +22,12 @@ export default function HostInfo() {
                 setError(response.message || 'Unbekannter Fehler');
             }
         } catch (err: any) {
-            console.error('Fetch Error:', err);
             setError(err.message);
         }
     }
 
     // Automatische Aktualisierung
-    useEffect(() => {
+    useEffect((): (() => void) => {
         fetchSystemInfo();
         const interval = setInterval(fetchSystemInfo, 5000);
         return () => clearInterval(interval);

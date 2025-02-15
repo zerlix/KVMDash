@@ -1,36 +1,37 @@
-import React, { useState } from 'react';
+import { useState, JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, Paper } from '@mui/material';
 
-export default function Login() {
+export default function Login(): JSX.Element {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
+    const handleLogin = async (): Promise<void> => {
         try {
-            const response = await fetch('http://kvmdash.back/api/login', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, password })
             });
-
+    
             const data = await response.json();
-
+            
             if (data.status === 'success') {
                 localStorage.setItem('token', data.token);
-                window.dispatchEvent(new Event('localStorageChanged')); // Erst Event dispatchen
+                window.dispatchEvent(new Event('localStorageChanged'));
                 setTimeout(() => {
-                    navigate('/'); // Dann zur Startseite navigieren
+                    navigate('/');
                 }, 100);
             } else {
-                setError(data.message);
+                setError(data.message || 'Login fehlgeschlagen');
             }
-        } catch (err) {
-            setError('Login fehlgeschlagen');
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'Login fehlgeschlagen');
         }
     };
 

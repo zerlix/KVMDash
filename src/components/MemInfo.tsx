@@ -1,13 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { fetchData } from '../services/apiService';
+import { MemData } from '../types/mem.types';
 
-interface MemData {
-    total: string;
-    used: string;
-    available: string;
-}
 
 const convertToGB = (value: string): number => {
     const unit = value.slice(-2);
@@ -26,14 +22,14 @@ const convertToGB = (value: string): number => {
     }
 };
 
-const MemInfoCard = () => {
+const MemInfoCard = (): JSX.Element => {
     const [memData, setMemData] = useState<MemData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchMemInfo = async () => {
+    const fetchMemInfo = async (): Promise<void> => {
         try {
-            const response = await fetchData('host/mem');
+            const response = await fetchData<MemData>('host/mem');
             if (response.status === 'success') {
                 setMemData(response.data);
             } else {
@@ -46,7 +42,7 @@ const MemInfoCard = () => {
         }
     };
 
-    useEffect(() => {
+    useEffect((): (() => void) => {
         fetchMemInfo();
         const interval = setInterval(fetchMemInfo, 5000);
         return () => clearInterval(interval);
@@ -61,7 +57,7 @@ const MemInfoCard = () => {
     }
 
     if (!memData) {
-        return null;
+        return <></>;
     }
 
     const totalGB = convertToGB(memData.total);
@@ -110,9 +106,6 @@ const MemInfoCard = () => {
                                         }}
                                     />
                                 </Box>
-                                <Typography variant="body2" sx={{ minWidth: 45 }}>
-                                    {memData.used}
-                                </Typography>
                             </Box>
                             <Typography variant="body2">
                                 Verfügbar: {availableGB} GiB (Gesamt: {totalGB} GiB, Belegt: {usedGB} GiB)

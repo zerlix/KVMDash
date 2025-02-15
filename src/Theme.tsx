@@ -1,7 +1,10 @@
+import { JSX } from 'react';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import App from './App';
-import { JSX } from 'react';
+
+const DRAWER_WIDTH = 240;
+const DRAWER_MINI_WIDTH = 64;
 
 // Theme Konstanten
 const themeColors = {
@@ -30,9 +33,39 @@ const themeColors = {
     }
 };
 
+
+// MUI Theme styles
 const theme = createTheme({
     palette: themeColors,
     components: {
+
+        // Sidebar
+        MuiDrawer: {
+            styleOverrides: {
+                root: {
+                    width: `${DRAWER_WIDTH}px`,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: `${DRAWER_WIDTH}px`,
+                        boxSizing: 'border-box',
+                        overflowX: 'hidden',
+                        transition: 'width 0.3s',
+                        boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.5)',
+                    }
+                }
+            }
+        },
+        MuiToolbar: {
+            styleOverrides: {
+                root: {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }
+            }
+        },
+
+        // Cards
         MuiCard: {
             styleOverrides: {
                 root: {
@@ -51,6 +84,7 @@ const theme = createTheme({
             }
         },
 
+        
         MuiListItem: {
             styleOverrides: {
                 root: {
@@ -99,7 +133,52 @@ const theme = createTheme({
     }
 });
 
-export function ThemedApp() :JSX.Element {
+
+/*
+ * Sidebar Styles
+ */
+
+// Sidebar close icon
+export const drawerControlIcon = {
+    container: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: '8px'
+    }
+};
+
+// logo sidebar
+export const logoStyles = {
+    logoTransition: {
+        open: {
+            width: '100%',
+            maxWidth: '100px',
+        },
+        closed: {
+            width: '50%',
+            maxWidth: '32px',
+        },
+        common: {
+            minWidth: '32px',
+            height: 'auto',
+            transition: 'width 0.3s, max-width 0.3s'
+        }
+    }
+};
+
+/*
+ * Main Content Styles
+ */
+export const layoutStyles = {
+    mainContent: {
+        // ...existing code...
+        width: (isOpen: boolean): string => 
+            `calc(100% - ${isOpen ? DRAWER_WIDTH : DRAWER_MINI_WIDTH}px)`
+    }
+};
+
+
+export function ThemedApp(): JSX.Element {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />

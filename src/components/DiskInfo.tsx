@@ -1,16 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { fetchData } from '../services/apiService';
+import { DiskData } from '../types/disk.types';
 
-interface DiskData {
-    Filesystem: string;
-    Size: string;
-    Used: string;
-    Avail: string;
-    Use: string;
-    Mounted: string;
-}
+
 
 // convertToGB Funktion
 const convertToGB = (value: string): number => {
@@ -30,14 +24,14 @@ const convertToGB = (value: string): number => {
     }
 };
 
-const DiskInfoCard = () => {
+const DiskInfoCard = (): JSX.Element => {
     const [diskData, setDiskData] = useState<DiskData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchDiskInfo = async () => {
+    const fetchDiskInfo = async (): Promise<void> => {
         try {
-            const response = await fetchData('host/disk');
+            const response = await fetchData<DiskData[]>('host/disk');
             if (response.status === 'success') {
                 setDiskData(response.data);
             } else {
@@ -50,7 +44,7 @@ const DiskInfoCard = () => {
         }
     };
 
-    useEffect(() => {
+    useEffect((): (() => void) => {
         fetchDiskInfo();
         const interval = setInterval(fetchDiskInfo, 5000);
         return () => clearInterval(interval);

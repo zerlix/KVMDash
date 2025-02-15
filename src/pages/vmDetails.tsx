@@ -8,7 +8,7 @@ import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 
 import { fetchData } from '../services/apiService';
-import { SpiceViewer } from '../Components/SpiceViewer';
+import { SpiceViewer } from '../components/SpiceViewer';
 
 
 interface VmDetails {
