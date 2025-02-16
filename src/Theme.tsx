@@ -167,11 +167,10 @@ export const logoStyles = {
 };
 
 /*
- * Main Content Styles
+ * Width main Content 
  */
 export const layoutStyles = {
     mainContent: {
-        // ...existing code...
         width: (isOpen: boolean): string => 
             `calc(100% - ${isOpen ? DRAWER_WIDTH : DRAWER_MINI_WIDTH}px)`
     }
