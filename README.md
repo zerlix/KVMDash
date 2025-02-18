@@ -56,18 +56,18 @@ cd kvmdash
 git submodule update --init --recursive
 ```
 
-4. SPICE HTML5 Client konfigurieren
+3. SPICE HTML5 Client konfigurieren
 ```bash
 cp src/assets/spice-html5/package.json.in src/assets/spice-html5/package.json
 sed -i 's/VERSION/0.3/g' src/assets/spice-html5/package.json
 ```
 
-3. Dependencies installieren:
+4. Dependencies installieren:
 ```bash
 npm install
 ```
 
-4. Entwicklungsserver starten:
+5. Entwicklungsserver starten:
 ```bash
 npm run dev
 ```
