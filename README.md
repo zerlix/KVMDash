@@ -37,8 +37,34 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 
 
 ## Installation
- 
 
+
+1. Repository klonen:
+```bash
+git clone https://github.com/zerlix/KVMDash.git kvmdash
+cd kvmdash
+```
+
+2. Submodule initialisieren und aktualisieren (für Spice CLient)
+```bash
+git submodule update --init --recursive
+```
+
+4. # SPICE HTML5 Client konfigurieren
+cp src/assets/spice-html5/package.json.in src/assets/spice-html5/package.json
+sed -i 's/VERSION/0.3/g' src/assets/spice-html5/package.json
+
+3. Dependencies installieren:
+```bash
+npm install
+```
+
+4. Entwicklungsserver starten:
+```bash
+npm run dev
+```
+
+## Konfiguration
 **API Endpoint konfiguration**
 
 In der Datei .env muss die VITE_API_URL auf den API Host zeigen
@@ -46,30 +72,5 @@ In der Datei .env muss die VITE_API_URL auf den API Host zeigen
 ```bash
 VITE_API_URL=http://kvmdash.back/api
 ```
-
-
-
-1. Repository klonen:
-```bash
-git clone --recursive https://your-repo/kvmdash.git
-cd kvmdash
-```
-
-2. Dependencies installieren:
-```bash
-npm install
-```
-
-3. Entwicklungsserver starten:
-```bash
-npm run dev
-```
-
-### Hinweis
-Falls Sie vergessen haben `--recursive` beim Klonen zu verwenden:
-```bash
-git submodule update --init --recursive
-```
-
 
 
