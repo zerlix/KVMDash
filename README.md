@@ -45,28 +45,29 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 
 ## Installation
 
-1. Repository klonen:
+#### 1. Repository klonen:
 ```bash
 git clone https://github.com/zerlix/KVMDash.git kvmdash
 cd kvmdash
 ```
-2. Submodule initialisieren und aktualisieren (für [Spice Client](https://gitlab.freedesktop.org/spice/spice-html5))
+
+####  2. Submodule initialisieren und aktualisieren (für [Spice Client](https://gitlab.freedesktop.org/spice/spice-html5))
 ```bash
 git submodule update --init --recursive
 ```
 
-3. SPICE HTML5 Client konfigurieren
+#### 3. SPICE HTML5 Client konfigurieren
 ```bash
 cp src/assets/spice-html5/package.json.in src/assets/spice-html5/package.json
 sed -i 's/VERSION/0.3/g' src/assets/spice-html5/package.json
 ```
 
-4. Dependencies installieren:
+####  4. Dependencies installieren:
 ```bash
 npm install
 ```
 
-5. Entwicklungsserver starten:
+####  5. Entwicklungsserver starten:
 ```bash
 npm run dev
 ```
