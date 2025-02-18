@@ -87,7 +87,7 @@ const handleDeleteConfirm = async (): Promise<void> => {
     // Timeout für VM-Aktionen
     const VM_ACTION_TIMEOUT = 30000; // 30 Sekunden
 
-    const handleVmAction = async (action: string, vmName: string): Promise<void> => {
+    const handleVmAction = async (action: string, vmName: string, deleteVhdFiles?: boolean): Promise<void> => {
         setLoading(vmName);
         setError(null);
 
@@ -97,8 +97,8 @@ const handleDeleteConfirm = async (): Promise<void> => {
 
         try {
             await Promise.race([
-                fetchData(`qemu/${action}/${vmName}${deleteVhd ? '?delete_vhd=true' : ''}`, { method: 'POST' }),
-                console.log(action + ' ' + vmName + (deleteVhd ? ' with VHD' : '')),
+                fetchData(`qemu/${action}/${vmName}${deleteVhdFiles? '??delete_vhd=true=true' : ''}`, { method: 'POST' }),
+                console.log(action + ' ' + vmName + (deleteVhdFiles? ' with VHD' : '')),
                 timeoutPromise
             ]);
             // Minimale Anzeigezeit für Loading bei Stop-Aktion
