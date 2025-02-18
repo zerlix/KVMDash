@@ -221,7 +221,7 @@ const handleDeleteConfirm = async (): Promise<void> => {
                                     <Box sx={{ marginLeft: 'auto' }}>
                                         <IconButton
                                             size="small"
-                                            disabled={vmData['state.state'] === '1' || loading === vmName}
+                                            /* disabled={vmData['state.state'] === '1' || loading === vmName}*/
                                             onClick={() => handleDeleteClick(vmName)}
                                         >
                                             <DeleteIcon sx={{ color: 'error.main' }} />
