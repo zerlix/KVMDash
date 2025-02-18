@@ -11,6 +11,7 @@ export default function Login(): JSX.Element {
 
     const handleLogin = async (): Promise<void> => {
         try {
+            
             const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
                 method: 'POST',
                 headers: {
@@ -24,9 +25,8 @@ export default function Login(): JSX.Element {
             if (data.status === 'success') {
                 localStorage.setItem('token', data.token);
                 window.dispatchEvent(new Event('localStorageChanged'));
-                setTimeout(() => {
-                    navigate('/');
-                }, 100);
+                await new Promise(resolve => setTimeout(resolve, 500));
+                navigate('/');
             } else {
                 setError(data.message || 'Login fehlgeschlagen');
             }
@@ -62,7 +62,7 @@ export default function Login(): JSX.Element {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <Button type="submit" variant="contained" color="primary" onClick={handleLogin}>
+                        <Button type="submit" variant="contained" color="primary">
                             Login
                         </Button>
                     </form>
