@@ -43,7 +43,8 @@ const createMessageDiv = (container: HTMLDivElement) => {
         zIndex: '1000',
         padding: '5px',
         backgroundColor: 'rgba(0,0,0,0.7)',
-        color: 'white'
+        color: 'white',
+        transition: 'opacity 0.5s ease-out' // Smooth fade-out Animation
     });
     container.appendChild(messageDiv);
     return messageDiv;
@@ -90,6 +91,17 @@ export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
                     console.log('🟢 SPICE Verbindung hergestellt');
                     messageDiv.textContent = 'Verbunden';
                     display.focus();
+                    setTimeout(() => {
+                        if (isComponentMounted && messageDiv) {
+                            messageDiv.style.opacity = '0';  // Sanftes Ausblenden
+                            // Nach der Animation komplett verstecken
+                            setTimeout(() => {
+                                if (isComponentMounted && messageDiv) {
+                                    messageDiv.style.display = 'none';
+                                }
+                            }, 500);  // 500ms = Dauer der opacity transition
+                        }
+                    }, 5000); 
                 },
                 onagent: (agent: SpiceAgent) => {
                     if (!isComponentMounted) return;
