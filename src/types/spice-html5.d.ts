@@ -1,4 +1,4 @@
-declare module '@spice-project/spice-html5/src/main' {
+declare module 'spice-html5/src/main'{
     export class SpiceMainConn {
         constructor(options: {
             uri: string;

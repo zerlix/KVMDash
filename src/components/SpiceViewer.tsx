@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { SpiceMainConn } from '@spice-project/spice-html5/src/main';
+import { SpiceMainConn } from 'spice-html5/src/main';
 
 interface SpiceViewerProps {
     host: string;
