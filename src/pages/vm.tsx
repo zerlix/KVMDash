@@ -97,7 +97,7 @@ const handleDeleteConfirm = async (): Promise<void> => {
 
         try {
             await Promise.race([
-                fetchData(`qemu/${action}/${vmName}${deleteVhdFiles? '??delete_vhd=true=true' : ''}`, { method: 'POST' }),
+                fetchData(`qemu/${action}/${vmName}${deleteVhdFiles? '?delete_vhd=true=true' : ''}`, { method: 'POST' }),
                 console.log(action + ' ' + vmName + (deleteVhdFiles? ' with VHD' : '')),
                 timeoutPromise
             ]);
