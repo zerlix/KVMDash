@@ -30,10 +30,13 @@
 https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 
 
+
 ## Voraussetzung
-- Node.js 18.x oder neuer
-- npm 9.x oder neuer
-Ein Linux-System mit:
+
+* Node.js 18.x oder neuer
+* npm 9.x oder neuer
+
+**Ein Linux-System mit:**
 * Installiertem KVM (Kernel-based Virtual Machine).
 * Installiertem libvirt für die Verwaltung von Virtualisierungsressourcen.
 * Installiertem KVMDash-API - https://github.com/zerlix/KVMDash-API
@@ -53,7 +56,7 @@ cd kvmdash
 git submodule update --init --recursive
 ```
 
-4. # SPICE HTML5 Client konfigurieren
+4. SPICE HTML5 Client konfigurieren
 cp src/assets/spice-html5/package.json.in src/assets/spice-html5/package.json
 sed -i 's/VERSION/0.3/g' src/assets/spice-html5/package.json
 
