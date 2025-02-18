@@ -4,7 +4,7 @@ import {
     Box, Card, CardContent, CardHeader, Typography,
     Chip, IconButton, CardActions, CircularProgress,
     Dialog, DialogTitle, DialogContent, DialogActions,
-    TextField, Button
+    TextField, Button, Checkbox, FormControlLabel
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
@@ -38,7 +38,7 @@ export default function VmContent(): JSX.Element {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
     const [vmToDelete, setVmToDelete] = useState<string>('');
     const [confirmationName, setConfirmationName] = useState<string>('');
-
+    const [deleteVhd, setDeleteVhd] = useState<boolean>(false);
 
 
     useEffect((): (() => void) => {
@@ -72,14 +72,17 @@ export default function VmContent(): JSX.Element {
         setConfirmationName('');
     };
 
-    const handleDeleteConfirm = async (): Promise<void> => {
-        if (confirmationName === vmToDelete) {
-            setDeleteDialogOpen(false);
-            await handleVmAction('delete', vmToDelete);
-            setVmToDelete('');
-            setConfirmationName('');
-        }
-    };
+// handleDeleteConfirm anpassen
+const handleDeleteConfirm = async (): Promise<void> => {
+    if (confirmationName === vmToDelete) {
+        setDeleteDialogOpen(false);
+        // deleteVhd als Parameter mitgeben
+        await handleVmAction('delete', vmToDelete, deleteVhd);
+        setVmToDelete('');
+        setConfirmationName('');
+        setDeleteVhd(false);  // Reset
+    }
+};
 
     // Timeout für VM-Aktionen
     const VM_ACTION_TIMEOUT = 30000; // 30 Sekunden
@@ -94,8 +97,8 @@ export default function VmContent(): JSX.Element {
 
         try {
             await Promise.race([
-                fetchData(`qemu/${action}/${vmName}`, { method: 'POST' }),
-                console.log(action + ' ' + vmName),
+                fetchData(`qemu/${action}/${vmName}${deleteVhd ? '?delete_vhd=true' : ''}`, { method: 'POST' }),
+                console.log(action + ' ' + vmName + (deleteVhd ? ' with VHD' : '')),
                 timeoutPromise
             ]);
             // Minimale Anzeigezeit für Loading bei Stop-Aktion
@@ -236,6 +239,20 @@ export default function VmContent(): JSX.Element {
                                                     error={confirmationName !== '' && confirmationName !== vmToDelete}
                                                     helperText={confirmationName !== '' && confirmationName !== vmToDelete ?
                                                         'Name stimmt nicht überein' : ''}
+                                                />
+                                                <FormControlLabel
+                                                    control={
+                                                        <Checkbox
+                                                            checked={deleteVhd}
+                                                            onChange={(e) => setDeleteVhd(e.target.checked)}
+                                                            color="error"
+                                                        />
+                                                    }
+                                                    label={
+                                                        <Typography color="error">
+                                                            Auch die zugehörigen VHD-Dateien (*.cow) löschen
+                                                        </Typography>
+                                                    }
                                                 />
                                             </DialogContent>
                                             <DialogActions>
