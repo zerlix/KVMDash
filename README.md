@@ -14,14 +14,22 @@
 
 
 
-
 ## Features
+
 ### VM Verwaltung
 * Erstellen, Löschen und Konfigurieren von VMs und Containern über die Weboberfläche.
 * Nutzung von Vorlagen für die schnelle und standardisierte Erstellung von VMs.
+
 ### Systemmonitoring
 * Echtzeitüberwachung von Ressourcen wie CPU, Arbeitsspeicher, Festplattenauslastung und weiteren wichtigen Systemmetriken.
 * Übersichtliche Darstellung der Systemleistung für eine optimale Kontrolle und Fehleranalyse.
+
+
+## Videos
+
+https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
+
+
 ## Voraussetzung
 - Node.js 18.x oder neuer
 - npm 9.x oder neuer
@@ -30,14 +38,9 @@ Ein Linux-System mit:
 * Installiertem libvirt für die Verwaltung von Virtualisierungsressourcen.
 * Installiertem KVMDash-API - https://github.com/zerlix/KVMDash-API
 
-## Videos
-
-https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
-
 
 
 ## Installation
-
 
 1. Repository klonen:
 ```bash
