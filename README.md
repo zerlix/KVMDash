@@ -50,8 +50,7 @@ https://github.com/user-attachments/assets/a991f259-7aa8-493f-af48-32413d03c780
 git clone https://github.com/zerlix/KVMDash.git kvmdash
 cd kvmdash
 ```
-
-2. Submodule initialisieren und aktualisieren (für Spice CLient)
+2. Submodule initialisieren und aktualisieren (für [Spice Client](https://gitlab.freedesktop.org/spice/spice-html5))
 ```bash
 git submodule update --init --recursive
 ```
