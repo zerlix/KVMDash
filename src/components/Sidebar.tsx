@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Divider, Toolbar, Collapse } from '@mui/material';
 import { logoStyles, drawerControlIcon } from '../Theme';
 
@@ -15,6 +15,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StorageIcon from '@mui/icons-material/Storage';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 // KVMDash Logo
 import KvmLogo from '../assets/kvmdash.svg';
@@ -32,7 +33,39 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     const [openVm, setOpenVm] = useState(false);
     const [vmList, setVmList] = useState<any[]>([]);
     const [error, setError] = useState<string>('');
+    const navigate = useNavigate();
 
+    // handleLogout Funktion
+    const handleLogout = async (): Promise<void> => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Logout fehlgeschlagen');
+            }
+
+            localStorage.removeItem('token');
+            window.dispatchEvent(new Event('localStorageChanged'));
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Bei Fehler trotzdem ausloggen
+            localStorage.removeItem('token');
+            window.dispatchEvent(new Event('localStorageChanged'));
+            navigate('/login');
+        }
+    };
+
+    // handle VM Click Funktion
     const handleVmClick = (): void => {
         if (!open) {
             toggleDrawer(); // Sidebar ausfahren, wenn sie geschlossen ist
@@ -53,6 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
         const interval = setInterval(fetchData, 5000);
         return (): void => clearInterval(interval);
     }, []);
+
 
     // Funktion um die Farbe des ComputerIcons zu bestimmen
     const getVmStatusColor = (vmData: any): string => {
@@ -159,6 +193,24 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
                     </ListItemButton>
                 </ListItem>
 
+            </List>
+
+            <List sx={{ marginTop: 'auto' }}>
+                {/* Logout Button - ganz unten in der Sidebar */}
+                <ListItem key="logout" disablePadding>
+                    <ListItemButton 
+                        onClick={handleLogout}
+                        sx={{ 
+                            justifyContent: open ? 'initial' : 'center',
+                            color: 'error.main'
+                        }}
+                    >
+                        <ListItemIcon sx={{ minWidth: open ? 48 : 0 }}>
+                            <LogoutIcon sx={{ color: 'error.main' }} />
+                        </ListItemIcon>
+                        {open && <ListItemText primary="Logout" />}
+                    </ListItemButton>
+                </ListItem>
             </List>
 
         </Drawer>
