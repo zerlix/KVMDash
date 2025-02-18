@@ -23,6 +23,8 @@
 * Echtzeitüberwachung von Ressourcen wie CPU, Arbeitsspeicher, Festplattenauslastung und weiteren wichtigen Systemmetriken.
 * Übersichtliche Darstellung der Systemleistung für eine optimale Kontrolle und Fehleranalyse.
 ## Voraussetzung
+- Node.js 18.x oder neuer
+- npm 9.x oder neuer
 Ein Linux-System mit:
 * Installiertem KVM (Kernel-based Virtual Machine).
 * Installiertem libvirt für die Verwaltung von Virtualisierungsressourcen.
@@ -44,5 +46,30 @@ In der Datei .env muss die VITE_API_URL auf den API Host zeigen
 ```bash
 VITE_API_URL=http://kvmdash.back/api
 ```
+
+
+
+1. Repository klonen:
+```bash
+git clone --recursive https://your-repo/kvmdash.git
+cd kvmdash
+```
+
+2. Dependencies installieren:
+```bash
+npm install
+```
+
+3. Entwicklungsserver starten:
+```bash
+npm run dev
+```
+
+### Hinweis
+Falls Sie vergessen haben `--recursive` beim Klonen zu verwenden:
+```bash
+git submodule update --init --recursive
+```
+
 
 
