@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Card,
     CardContent,
@@ -10,6 +10,8 @@ import {
 } from '@mui/material';
 import ComputerIcon from '@mui/icons-material/Computer';
 import Grid from '@mui/material/Grid2';
+import { fetchData } from '../services/apiService';
+
 
 interface CreateVmFormProps {
     onSubmit: (data: VmFormData) => void;
@@ -30,13 +32,20 @@ const initialFormData: VmFormData = {
     memory: 2048,
     vcpus: 2,
     disk_size: 20,
-    iso_image: '/mnt/raid/CDImages/debian-12.9.0-amd64-netinst.iso',
+    iso_image: '',
     network_bridge: 'br0',
     os_variant: 'linux2022'
 };
 
+interface IsoFile {
+    name: string;
+    path: string;
+}
+
 export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<VmFormData>(initialFormData);
+    const [isoFiles, setIsoFiles] = useState<IsoFile[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -50,6 +59,32 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
         e.preventDefault();
         onSubmit(formData);
     };
+
+
+    useEffect(() => {
+        const loadIsoFiles = async () => {
+            try {
+                const response = await fetchData<IsoFile[]>('iso/list');
+                if (response.status === 'success') {
+                    setIsoFiles(response.data);
+                    // Optional: Setze erste ISO als Standard
+                    if (response.data.length > 0) {
+                        setFormData(prev => ({
+                            ...prev,
+                            iso_image: response.data[0].path
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der ISO-Dateien:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadIsoFiles();
+    }, []);
+
 
     return (
         <Card elevation={3}>
@@ -117,17 +152,29 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
                                 required
                             />
                         </Grid>
-                        <Grid size={{ xs: 12}}>
+                        <Grid size={{ xs: 12 }}>
                             <TextField
                                 fullWidth
+                                select
                                 label="ISO Image"
                                 name="iso_image"
                                 value={formData.iso_image}
                                 onChange={handleChange}
                                 required
-                            />
+                                disabled={isLoading}
+                            >
+                                {isLoading ? (
+                                    <MenuItem disabled>Lade ISO-Dateien...</MenuItem>
+                                ) : (
+                                    isoFiles.map((iso) => (
+                                        <MenuItem key={iso.path} value={iso.path}>
+                                            {iso.name}
+                                        </MenuItem>
+                                    ))
+                                )}
+                            </TextField>
                         </Grid>
-                        <Grid size={{ xs: 12}}>
+                        <Grid size={{ xs: 12 }}>
                             <TextField
                                 fullWidth
                                 select
@@ -143,7 +190,7 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
                                 <MenuItem value="win11">Windows 11</MenuItem>
                             </TextField>
                         </Grid>
-                        <Grid size={{ xs: 12}}>
+                        <Grid size={{ xs: 12 }}>
                             <Button
                                 type="submit"
                                 variant="contained"
