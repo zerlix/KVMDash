@@ -45,7 +45,7 @@ const SettingsContent: FC = (): ReactElement => {
         try {
             const response = await fetchData('iso/status');
             
-            if (response.status === 'completed') {
+            if (response.status === 'success') {
                 setDownloadProgress(false);
                 setUploadStatus('Download abgeschlossen!');
             } else if (response.status === 'error') {
