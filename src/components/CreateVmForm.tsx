@@ -46,6 +46,16 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<VmFormData>(initialFormData);
     const [isoFiles, setIsoFiles] = useState<IsoFile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [networkType, setNetworkType] = useState('bridge');
+
+    const handleNetworkTypeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const type = e.target.value;
+        setNetworkType(type);
+        setFormData(prev => ({
+            ...prev,
+            network_bridge: type === 'nat' ? 'default' : 'br0'
+        }));
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -145,12 +155,15 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
                         <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
-                                label="Network Bridge"
-                                name="network_bridge"
-                                value={formData.network_bridge}
-                                onChange={handleChange}
+                                select
+                                label="Netzwerk Typ"
+                                value={networkType}
+                                onChange={handleNetworkTypeChange}
                                 required
-                            />
+                            >
+                                <MenuItem value="bridge">Bridge (br0)</MenuItem>
+                                <MenuItem value="nat">NAT</MenuItem>
+                            </TextField>
                         </Grid>
                         <Grid size={{ xs: 12 }}>
                             <TextField
