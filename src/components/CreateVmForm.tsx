@@ -33,7 +33,7 @@ const initialFormData: VmFormData = {
     vcpus: 2,
     disk_size: 20,
     iso_image: '',
-    network_bridge: 'br0',
+    network_bridge: '', // Änderung hier: leerer String als Initialwert
     os_variant: 'linux2022'
 };
 
@@ -42,20 +42,18 @@ interface IsoFile {
     path: string;
 }
 
+interface NetworkOption {
+    name: string;
+    type: 'bridge' | 'nat';
+    value: string;
+    active?: boolean;
+}
+
 export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<VmFormData>(initialFormData);
     const [isoFiles, setIsoFiles] = useState<IsoFile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [networkType, setNetworkType] = useState('bridge');
-
-    const handleNetworkTypeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const type = e.target.value;
-        setNetworkType(type);
-        setFormData(prev => ({
-            ...prev,
-            network_bridge: type === 'nat' ? 'default' : 'br0'
-        }));
-    };
+    const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -69,7 +67,6 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
         e.preventDefault();
         onSubmit(formData);
     };
-
 
     useEffect(() => {
         const loadIsoFiles = async () => {
@@ -92,7 +89,32 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
             }
         };
 
+        const loadNetworkOptions = async () => {
+            try {
+                const response = await fetchData<NetworkOption[]>('qemu/network/list');
+                if (response.status === 'success') {
+                    console.log('Received network options:', response.data); // Debug logging
+                    const activeNetworks = response.data.filter(opt => 
+                        opt.type === 'bridge' || (opt.type === 'nat' && opt.active)
+                    );
+                    setNetworkOptions(activeNetworks);
+                    
+                    // Setze ersten verfügbaren Wert als Standard
+                    if (activeNetworks.length > 0) {
+                        console.log('Setting default network:', activeNetworks[0].value); // Debug logging
+                        setFormData(prev => ({
+                            ...prev,
+                            network_bridge: activeNetworks[0].value
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Netzwerkoptionen:', error);
+            }
+        };
+
         loadIsoFiles();
+        loadNetworkOptions();
     }, []);
 
 
@@ -156,13 +178,24 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
                             <TextField
                                 fullWidth
                                 select
-                                label="Netzwerk Typ"
-                                value={networkType}
-                                onChange={handleNetworkTypeChange}
+                                label="Netzwerk"
+                                name="network_bridge"
+                                value={formData.network_bridge}
+                                onChange={handleChange}
                                 required
                             >
-                                <MenuItem value="bridge">Bridge (br0)</MenuItem>
-                                <MenuItem value="nat">NAT</MenuItem>
+                                {networkOptions.length === 0 ? (
+                                    <MenuItem disabled>Keine Netzwerke verfügbar</MenuItem>
+                                ) : (
+                                    networkOptions.map((option) => (
+                                        <MenuItem
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.name}
+                                        </MenuItem>
+                                    ))
+                                )}
                             </TextField>
                         </Grid>
                         <Grid size={{ xs: 12 }}>
