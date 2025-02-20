@@ -6,7 +6,8 @@ import {
     TextField,
     Button,
     MenuItem,
-    Box
+    Box,
+    Autocomplete
 } from '@mui/material';
 import ComputerIcon from '@mui/icons-material/Computer';
 import Grid from '@mui/material/Grid2';
@@ -54,6 +55,7 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     const [isoFiles, setIsoFiles] = useState<IsoFile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
+    const [osVariants, setOsVariants] = useState<string[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -113,8 +115,20 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
             }
         };
 
+        const loadOsVariants = async () => {
+            try {
+                const response = await fetchData<string[]>('qemu/osinfo/list');
+                if (response.status === 'success') {
+                    setOsVariants(response.data);
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der OS-Varianten:', error);
+            }
+        };
+
         loadIsoFiles();
         loadNetworkOptions();
+        loadOsVariants();
     }, []);
 
 
@@ -221,20 +235,24 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
                             </TextField>
                         </Grid>
                         <Grid size={{ xs: 12 }}>
-                            <TextField
+                            <Autocomplete
                                 fullWidth
-                                select
-                                label="Betriebssystem"
-                                name="os_variant"
+                                options={osVariants}
                                 value={formData.os_variant}
-                                onChange={handleChange}
-                                required
-                            >
-                                <MenuItem value="linux2022">Linux 2022</MenuItem>
-                                <MenuItem value="debian12">Debian 12</MenuItem>
-                                <MenuItem value="ubuntu22.04">Ubuntu 22.04</MenuItem>
-                                <MenuItem value="win11">Windows 11</MenuItem>
-                            </TextField>
+                                onChange={(event, newValue) => {
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        os_variant: newValue || 'linux2022'
+                                    }));
+                                }}
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label="Betriebssystem"
+                                        required
+                                    />
+                                )}
+                            />
                         </Grid>
                         <Grid size={{ xs: 12 }}>
                             <Button
