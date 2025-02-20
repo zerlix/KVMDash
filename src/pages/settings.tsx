@@ -1,29 +1,62 @@
-import { FC, ReactElement, useState } from 'react';
-import { Box, Typography, Card, CardContent, CardHeader, Collapse, IconButton, TextField, Button, Alert } from '@mui/material';
+import { FC, ReactElement, useState, useEffect } from 'react';
+import { Box, Typography, Card, CardContent, CardHeader, Collapse, IconButton, TextField, Button, Alert, CircularProgress, LinearProgress } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { fetchData } from '../services/apiService';
 
 const SettingsContent: FC = (): ReactElement => {
     const [expanded1, setExpanded1] = useState(false);
     const [expanded2, setExpanded2] = useState(false);
     const [isoUrl, setIsoUrl] = useState('');
     const [error, setError] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState<string>('');
+    const [downloadProgress, setDownloadProgress] = useState<boolean>(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
-        // Überprüfen ob die URL auf .iso endet
         if (!isoUrl.toLowerCase().endsWith('.iso')) {
             setError('Die URL muss auf .iso enden');
             return;
         }
 
-        // Überprüfen ob es eine gültige URL ist
         try {
-            new URL(isoUrl);
-            alert('ISO-URL wurde erfolgreich gespeichert');
-        } catch {
-            setError('Bitte geben Sie eine gültige URL ein');
+            setIsUploading(true);
+            setDownloadProgress(true);
+            setUploadStatus('Download wird gestartet...');
+
+            const response = await fetchData('iso/upload', {
+                method: 'POST',
+                body: JSON.stringify({ url: isoUrl })
+            });
+
+            setUploadStatus('ISO-Download wurde erfolgreich gestartet!');
+            checkDownloadStatus();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Fehler beim Senden der Anfrage');
+            setDownloadProgress(false);
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const checkDownloadStatus = async () => {
+        try {
+            const response = await fetchData('iso/status');
+            
+            if (response.status === 'completed') {
+                setDownloadProgress(false);
+                setUploadStatus('Download abgeschlossen!');
+            } else if (response.status === 'error') {
+                setError(response.message || 'Unbekannter Fehler');
+                setDownloadProgress(false);
+            } else {
+                setTimeout(checkDownloadStatus, 2000);
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Fehler beim Abrufen des Download-Status');
+            setDownloadProgress(false);
         }
     };
 
@@ -59,10 +92,23 @@ const SettingsContent: FC = (): ReactElement => {
                                         error={!!error}
                                         helperText={error || 'Bitte geben Sie eine gültige ISO-URL ein'}
                                         fullWidth
+                                        disabled={isUploading || downloadProgress}
                                     />
+                                    {downloadProgress && (
+                                        <Box sx={{ width: '100%' }}>
+                                            <LinearProgress />
+                                            <Typography variant="body2" sx={{ mt: 1 }}>
+                                                {uploadStatus}
+                                            </Typography>
+                                        </Box>
+                                    )}
+                                    {error && (
+                                        <Alert severity="error">{error}</Alert>
+                                    )}
                                     <Button 
                                         type="submit"
                                         variant="contained"
+                                        disabled={isUploading || downloadProgress}
                                         sx={{ 
                                             backgroundColor: '#853500',
                                             '&:hover': {
@@ -70,7 +116,7 @@ const SettingsContent: FC = (): ReactElement => {
                                             }
                                         }}
                                     >
-                                        Absenden
+                                        {isUploading ? <CircularProgress size={24} color="inherit" /> : 'Absenden'}
                                     </Button>
                                 </Box>
                             </form>
@@ -99,7 +145,7 @@ const SettingsContent: FC = (): ReactElement => {
                 <Collapse in={expanded2}>
                     <CardContent>
                         <Typography>
-                            Hier können Benutzereinstellungen angepasst werden.
+                        todo...
                         </Typography>
                     </CardContent>
                 </Collapse>
