@@ -5,6 +5,10 @@ import Grid from '@mui/material/Grid2';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 import { fetchData } from '../services/apiService';
 import { SpiceViewer } from '../components/SpiceViewer';
+import { VmGuestInfo } from '../components/VmGuestInfo';
+import { VmMemInfo } from '../components/VmMemInfo';
+import { VmCpuInfo } from '../components/VmCpuInfo';
+import { VmDiskInfo } from '../components/VmDiskInfo';
 
 interface VmDetails {
     name: string;
@@ -47,6 +51,18 @@ export default function VmDetailsPage(): JSX.Element {
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
             <Grid container spacing={2}>
+                <Grid size={{ xs: 6 }}>
+                    <VmGuestInfo />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                    <VmMemInfo />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                    <VmCpuInfo />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                    <VmDiskInfo />
+                </Grid>
                 <Grid size={{ xs: 12 }}>
                     <Card elevation={3}>
                         <CardHeader
