@@ -1,18 +1,12 @@
 import type { VmFormData } from '../types/vm.types';
+import type { VmList } from '../types/vm.types';
 
 export interface ApiConfig {
     baseUrl: string;
     token: string | null;
 }
 
-export interface VmList {
-    [key: string]: {
-        'state.state': string;
-        'state.reason': string;
-        'balloon.current': string;  // Änderung von number zu string
-        'vcpu.current': number;
-    }
-}
+
 
 class ApiClient {
     private config: ApiConfig;
@@ -60,7 +54,7 @@ class ApiClient {
         if (!this.config.token) {
             throw new Error('Nicht authentifiziert');
         }
-
+    
         const response = await fetch(`${this.config.baseUrl}/${endpoint}`, {
             ...options,
             headers: {
@@ -69,13 +63,14 @@ class ApiClient {
                 ...options.headers
             }
         });
-
+    
         const data = await response.json();
-        if (!response.ok || data.status === 'error') {
-            throw new Error(data.message || `HTTP-Fehler: ${response.status}`);
-        }
-
-        return data.data;
+        
+        // Debug-Log
+        console.log('Raw API Response:', endpoint, data);
+        
+        // Wenn data.data existiert, gib data.data zurück, sonst data
+        return data.data || data;
     }
 }
 

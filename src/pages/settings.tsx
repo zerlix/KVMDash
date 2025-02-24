@@ -2,6 +2,8 @@ import { FC, ReactElement, useState, useEffect } from 'react';
 import { Box, Typography, Card, CardContent, CardHeader, Collapse, IconButton, TextField, Button, Alert, CircularProgress, LinearProgress } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { api } from '../services/apiService';
+import type { IsoStatus } from '../types/vm.types';
+
 
 const SettingsContent: FC = (): ReactElement => {
     const [expanded1, setExpanded1] = useState(false);
@@ -39,23 +41,24 @@ const SettingsContent: FC = (): ReactElement => {
         }
     };
 
-    const checkDownloadStatus = async () => {
+    const checkDownloadStatus = async (): Promise<void> => {
         try {
-            // Neuer API-Aufruf
-            const status = await api.get<{ status: string; message?: string }>('iso/status');
+            const response = await api.get<IsoStatus>('iso/status');
             
-            if (status.status === 'success') {
+            // Vereinfachte Logik:
+            if (response?.status === 'success') {
                 setDownloadProgress(false);
                 setUploadStatus('Download abgeschlossen!');
-            } else if (status.status === 'error') {
-                setError(status.message || 'Unbekannter Fehler');
-                setDownloadProgress(false);
-            } else {
-                setTimeout(checkDownloadStatus, 2000);
+                return;
             }
+            
+            // Bei allen anderen Status weitermachen
+            setUploadStatus(response?.message || 'Download läuft...');
+            setTimeout(checkDownloadStatus, 2000);
+            
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Fehler beim Abrufen des Download-Status');
-            setDownloadProgress(false);
+            // Bei Fehlern weitermachen
+            setTimeout(checkDownloadStatus, 2000);
         }
     };
 

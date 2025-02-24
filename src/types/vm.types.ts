@@ -8,11 +8,6 @@ export interface VmFormData {
     os_variant: string;
 }
 
-export interface IsoFile {
-    name: string;
-    path: string;
-}
-
 export interface NetworkOption {
     name: string;
     type: 'bridge' | 'nat';
@@ -27,4 +22,15 @@ export interface VmList {
         'balloon.current': string;
         'vcpu.current': number;
     }
+}
+
+export interface IsoStatus {
+    status: 'downloading' | 'success' | 'error';
+    message?: string;
+    timestamp?: number;
+}
+
+export interface IsoFile {
+    name: string;
+    path: string;
 }
