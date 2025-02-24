@@ -1,35 +1,29 @@
 import { Box, Card, CardHeader, Typography, CardContent, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState, JSX } from 'react';
-import { fetchData } from '../services/apiService';
+import { api } from '../services/apiService';
 import { SystemInfo } from '../types/system.types';
-
 
 export default function HostInfo(): JSX.Element {
     // State Management
-    const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
+    const [systemInfo, setHostInfo] = useState<SystemInfo | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // API Abruf
-    const fetchSystemInfo = async (): Promise<void> => {
-        try {
-            // Hier erwarten wir direkt SystemInfo als data Typ
-            const response = await fetchData<SystemInfo>('host/info');
-            if (response.status === 'success') {
-                setSystemInfo(response.data);
-                setError(null);
-            } else {
-                setError(response.message || 'Unbekannter Fehler');
+    // Nur ein useEffect für das Polling
+    useEffect(() => {
+        const fetchHostInfo = async () => {
+            try {
+                const info = await api.get<SystemInfo>('host/info');
+                setHostInfo(info);
+            } catch (err) {
+                const message = err instanceof Error ? err.message : 'Unbekannter Fehler';
+                setError(message);
+                console.error('Fehler beim Laden der Host-Informationen:', message);
             }
-        } catch (err: any) {
-            setError(err.message);
-        }
-    }
-
-    // Automatische Aktualisierung
-    useEffect((): (() => void) => {
-        fetchSystemInfo();
-        const interval = setInterval(fetchSystemInfo, 5000);
+        };
+    
+        fetchHostInfo();
+        const interval = setInterval(fetchHostInfo, 5000);
         return () => clearInterval(interval);
     }, []);
 
@@ -42,15 +36,12 @@ export default function HostInfo(): JSX.Element {
                 />
                 <CardContent>
                     {error ? (
-                        // errormessage
                         <Typography color="error">{error}</Typography>
                     ) : !systemInfo ? (
-                        // progress (loading)
                         <Box display="flex" justifyContent="center" p={2}>
                             <CircularProgress />
                         </Box>
                     ) : (
-                        // output
                         <Grid container spacing={2} alignItems="center">
                             {[
                                 { label: "Hostname", value: systemInfo.Hostname },

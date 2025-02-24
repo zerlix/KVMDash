@@ -11,22 +11,14 @@ import {
 } from '@mui/material';
 import ComputerIcon from '@mui/icons-material/Computer';
 import Grid from '@mui/material/Grid2';
-import { fetchData } from '../services/apiService';
+import { api } from '../services/apiService';
+import { VmFormData, IsoFile, NetworkOption } from '../types/vm.types';
 
 
 interface CreateVmFormProps {
     onSubmit: (data: VmFormData) => void;
 }
 
-export interface VmFormData {
-    name: string;
-    memory: number;
-    vcpus: number;
-    disk_size: number;
-    iso_image: string;
-    network_bridge: string;
-    os_variant: string;
-}
 
 const initialFormData: VmFormData = {
     name: '',
@@ -34,21 +26,10 @@ const initialFormData: VmFormData = {
     vcpus: 2,
     disk_size: 20,
     iso_image: '',
-    network_bridge: '', // Änderung hier: leerer String als Initialwert
+    network_bridge: '',
     os_variant: 'linux2022'
 };
 
-interface IsoFile {
-    name: string;
-    path: string;
-}
-
-interface NetworkOption {
-    name: string;
-    type: 'bridge' | 'nat';
-    value: string;
-    active?: boolean;
-}
 
 export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<VmFormData>(initialFormData);
@@ -73,16 +54,13 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     useEffect(() => {
         const loadIsoFiles = async () => {
             try {
-                const response = await fetchData<IsoFile[]>('iso/list');
-                if (response.status === 'success') {
-                    setIsoFiles(response.data);
-                    // Optional: Setze erste ISO als Standard
-                    if (response.data.length > 0) {
-                        setFormData(prev => ({
-                            ...prev,
-                            iso_image: response.data[0].path
-                        }));
-                    }
+                const data = await api.get<IsoFile[]>('iso/list');
+                setIsoFiles(data);
+                if (data.length > 0) {
+                    setFormData(prev => ({
+                        ...prev,
+                        iso_image: data[0].path
+                    }));
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der ISO-Dateien:', error);
@@ -93,22 +71,17 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
 
         const loadNetworkOptions = async () => {
             try {
-                const response = await fetchData<NetworkOption[]>('qemu/network/list');
-                if (response.status === 'success') {
-                    console.log('Received network options:', response.data); // Debug logging
-                    const activeNetworks = response.data.filter(opt => 
-                        opt.type === 'bridge' || (opt.type === 'nat' && opt.active)
-                    );
-                    setNetworkOptions(activeNetworks);
-                    
-                    // Setze ersten verfügbaren Wert als Standard
-                    if (activeNetworks.length > 0) {
-                        console.log('Setting default network:', activeNetworks[0].value); // Debug logging
-                        setFormData(prev => ({
-                            ...prev,
-                            network_bridge: activeNetworks[0].value
-                        }));
-                    }
+                const data = await api.get<NetworkOption[]>('qemu/network/list');
+                const activeNetworks = data.filter(opt => 
+                    opt.type === 'bridge' || (opt.type === 'nat' && opt.active)
+                );
+                setNetworkOptions(activeNetworks);
+                
+                if (activeNetworks.length > 0) {
+                    setFormData(prev => ({
+                        ...prev,
+                        network_bridge: activeNetworks[0].value
+                    }));
                 }
             } catch (error) {
                 console.error('Fehler beim Laden der Netzwerkoptionen:', error);
@@ -117,10 +90,8 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
 
         const loadOsVariants = async () => {
             try {
-                const response = await fetchData<string[]>('qemu/osinfo/list');
-                if (response.status === 'success') {
-                    setOsVariants(response.data);
-                }
+                const data = await api.get<string[]>('qemu/osinfo/list');
+                setOsVariants(data);
             } catch (error) {
                 console.error('Fehler beim Laden der OS-Varianten:', error);
             }
@@ -130,7 +101,6 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
         loadNetworkOptions();
         loadOsVariants();
     }, []);
-
 
     return (
         <Card elevation={3}>

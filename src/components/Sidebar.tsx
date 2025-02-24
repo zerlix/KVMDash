@@ -20,7 +20,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 // KVMDash Logo
 import KvmLogo from '../assets/kvmdash.svg';
 
-import { fetchVmList } from '../services/vmService';
+import { api } from '../services/apiService';
+import type { VmList } from '../services/apiService'; 
 
 const drawerWidth = 240;
 
@@ -31,7 +32,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     const [openVm, setOpenVm] = useState(false);
-    const [vmList, setVmList] = useState<any[]>([]);
+    const [vmList, setVmList] = useState<VmList>({});  // leeres Objekt statt Array
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
 
@@ -76,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, toggleDrawer }) => {
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
             try {
-                const data = await fetchVmList();
+                const data = await api.vm.list();
                 setVmList(data);
             } catch (err: any) {
                 setError(err.message);
