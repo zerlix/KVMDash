@@ -12,20 +12,13 @@ import {
 import ComputerIcon from '@mui/icons-material/Computer';
 import Grid from '@mui/material/Grid2';
 import { api } from '../services/apiService';
+import { VmFormData, IsoFile, NetworkOption } from '../types/vm.types';
+
 
 interface CreateVmFormProps {
     onSubmit: (data: VmFormData) => void;
 }
 
-export interface VmFormData {
-    name: string;
-    memory: number;
-    vcpus: number;
-    disk_size: number;
-    iso_image: string;
-    network_bridge: string;
-    os_variant: string;
-}
 
 const initialFormData: VmFormData = {
     name: '',
@@ -37,17 +30,6 @@ const initialFormData: VmFormData = {
     os_variant: 'linux2022'
 };
 
-interface IsoFile {
-    name: string;
-    path: string;
-}
-
-interface NetworkOption {
-    name: string;
-    type: 'bridge' | 'nat';
-    value: string;
-    active?: boolean;
-}
 
 export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<VmFormData>(initialFormData);

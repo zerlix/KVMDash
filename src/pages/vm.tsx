@@ -12,7 +12,9 @@ import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { CreateVmForm, VmFormData } from '../components/CreateVmForm';
+import { CreateVmForm} from '../components/CreateVmForm';
+import type { VmFormData } from '../types/vm.types';
+
 import { api } from '../services/apiService';
 import type { VmList } from '../services/apiService';
 
@@ -56,19 +58,26 @@ export default function VmContent(): JSX.Element {
         }
     };
 
-    const handleVmAction = async (action: string, vmName: string, deleteVhdFiles?: boolean): Promise<void> => {
+    const handleVmAction = async (action: 'start' | 'stop' | 'reboot' | 'delete', vmName: string, deleteVhdFiles?: boolean): Promise<void> => {
         setLoading(vmName);
         setError(null);
-
+    
         try {
-            if (action === 'delete') {
-                await api.vm.delete(vmName, deleteVhdFiles);
-            } else {
-                await api.vm[action](vmName);
-            }
-            
-            if (action === 'stop') {
-                await new Promise(resolve => setTimeout(resolve, 5000));
+            switch(action) {
+                case 'delete':
+                    await api.vm.delete(vmName, deleteVhdFiles);
+                    break;
+                case 'start':
+                    await api.vm.start(vmName);
+                    break;
+                case 'stop':
+                    await api.vm.stop(vmName);
+                    // Warte 5 Sekunden nach Stop-Befehl
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    break;
+                case 'reboot':
+                    await api.vm.reboot(vmName);
+                    break;
             }
         } catch (err: any) {
             setError(`VM Aktion fehlgeschlagen: ${err.message}`);

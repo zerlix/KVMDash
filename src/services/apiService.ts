@@ -1,3 +1,5 @@
+import type { VmFormData } from '../types/vm.types';
+
 export interface ApiConfig {
     baseUrl: string;
     token: string | null;
@@ -23,28 +25,31 @@ class ApiClient {
     }
 
     vm = {
-        list: async () => {
+        list: async (): Promise<VmList> => {
             return this.get<VmList>('qemu/list');
         },
-        start: async (name: string) => {
+        start: async (name: string): Promise<void> => {
             return this.post(`qemu/start/${name}`);
         },
-        stop: async (name: string) => {
+        stop: async (name: string): Promise<void> => {
             return this.post(`qemu/stop/${name}`);
         },
-        delete: async (name: string, deleteVhdFiles?: boolean) => {
+        reboot: async (name: string): Promise<void> => {
+            return this.post(`qemu/reboot/${name}`);
+        },
+        delete: async (name: string, deleteVhdFiles?: boolean): Promise<void> => {
             return this.post(`qemu/delete/${name}${deleteVhdFiles ? '?delete_vhd=true' : ''}`);
         },
-        create: async (data: any) => {
+        create: async (data: VmFormData): Promise<void> => {
             return this.post('qemu/create', data);
         }
     };
 
-    public async get<T>(endpoint: string) {
+    public async get<T>(endpoint: string): Promise<T> {
         return this.request<T>(endpoint, { method: 'GET' });
     }
 
-    public  async post<T>(endpoint: string, body?: unknown) {
+    public async post<T>(endpoint: string, body?: unknown): Promise<T> {
         return this.request<T>(endpoint, {
             method: 'POST',
             body: JSON.stringify(body)
