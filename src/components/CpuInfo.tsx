@@ -1,7 +1,7 @@
 import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { fetchData } from '../services/apiService';
+import { api } from '../services/apiService';
 import { CpuData } from '../types/cpu.types';
 
 const getUsageColor = (usage: number): string => {
@@ -17,16 +17,14 @@ const CpuInfoCard = (): JSX.Element => {
 
     const fetchCpuInfo = async (): Promise<void> => {
         try {
-            const response = await fetchData<CpuData[]>('host/cpu');
-            if (response.status === 'success') {
-                const filteredData = response.data.filter(cpu => cpu.cpu !== 'cpu');
-                setCpuData(filteredData);
-            } else {
-                setError(response.message || 'Unbekannter Fehler');
-            }
+            const data = await api.get<CpuData[]>('host/cpu');
+            // Keine response.status Prüfung mehr nötig, da der api Service das handhabt
+            const filteredData = data.filter(cpu => cpu.cpu !== 'cpu');
+            setCpuData(filteredData);
             setLoading(false);
-        } catch (err: any) {
-            setError(`Error: ${err.message}`);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Unbekannter Fehler';
+            setError(`Error: ${message}`);
             setLoading(false);
         }
     };

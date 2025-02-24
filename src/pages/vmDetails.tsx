@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
-import { fetchData } from '../services/apiService';
+import { api } from '../services/apiService';
 import { SpiceViewer } from '../components/SpiceViewer';
 import { VmGuestInfo } from '../components/VmGuestInfo';
 import { VmMemInfo } from '../components/VmMemInfo';
@@ -28,14 +28,12 @@ export default function VmDetailsPage(): JSX.Element {
     useEffect(() => {
         const fetchVmDetails = async (): Promise<void> => {
             try {
-                const data = await fetchData<VmDetails>(`qemu/listdetails/${vmName}`);
-                if (data.status === 'success') {
-                    setVmDetails(data.data);
-                } else {
-                    throw new Error(data.message || 'Fehler beim Laden der VM Details');
-                }
+                // api.get nutzt statt fetchData
+                const details = await api.get<VmDetails>(`qemu/listdetails/${vmName}`);
+                setVmDetails(details);
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'Unbekannter Fehler');
+                const message = err instanceof Error ? err.message : 'Unbekannter Fehler';
+                setError(message);
             } finally {
                 setLoading(false);
             }

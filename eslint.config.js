@@ -17,7 +17,7 @@ export default [
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
-      'no-console': 'warn'
+      'no-console': 'off'
     }
   }
 ];

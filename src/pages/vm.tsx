@@ -1,5 +1,4 @@
 import { useState, useEffect, JSX } from 'react';
-
 import {
     Box, Card, CardContent, CardHeader, Typography,
     Chip, IconButton, CardActions, CircularProgress,
@@ -13,49 +12,24 @@ import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-
 import { CreateVmForm, VmFormData } from '../components/CreateVmForm';
-
-import { fetchVmList } from '../services/vmService';
-import { fetchData } from '../services/apiService';
-
-
-interface VmData {
-    [key: string]: {
-        'state.state': string;
-        'state.reason': string;
-        'balloon.current': string;
-        'vcpu.current': string;
-    }
-}
+import { api } from '../services/apiService';
+import type { VmList } from '../services/apiService';
 
 export default function VmContent(): JSX.Element {
-
-    const [vms, setVms] = useState<VmData>({});
+    const [vms, setVms] = useState<VmList>({});
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<string>('');
-
     const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
     const [vmToDelete, setVmToDelete] = useState<string>('');
     const [confirmationName, setConfirmationName] = useState<string>('');
     const [deleteVhd, setDeleteVhd] = useState<boolean>(false);
 
-
     useEffect((): (() => void) => {
         const fetchData = async (): Promise<void> => {
             try {
-                const vmList = await fetchVmList();
-                // Konvertiere die API-Antwort in das richtige Format
-                const formattedData: VmData = {};
-                Object.entries(vmList).forEach(([name, data]: [string, any]) => {
-                    formattedData[name] = {
-                        'state.state': data['state.state'],
-                        'state.reason': data['state.reason'],
-                        'balloon.current': data['balloon.current'],
-                        'vcpu.current': data['vcpu.current']
-                    };
-                });
-                setVms(formattedData);
+                const vmList = await api.vm.list();
+                setVms(vmList);
             } catch (err: any) {
                 setError(err.message);
             }
@@ -72,36 +46,27 @@ export default function VmContent(): JSX.Element {
         setConfirmationName('');
     };
 
-// handleDeleteConfirm anpassen
-const handleDeleteConfirm = async (): Promise<void> => {
-    if (confirmationName === vmToDelete) {
-        setDeleteDialogOpen(false);
-        // deleteVhd als Parameter mitgeben
-        await handleVmAction('delete', vmToDelete, deleteVhd);
-        setVmToDelete('');
-        setConfirmationName('');
-        setDeleteVhd(false);  // Reset
-    }
-};
-
-    // Timeout für VM-Aktionen
-    const VM_ACTION_TIMEOUT = 30000; // 30 Sekunden
+    const handleDeleteConfirm = async (): Promise<void> => {
+        if (confirmationName === vmToDelete) {
+            setDeleteDialogOpen(false);
+            await handleVmAction('delete', vmToDelete, deleteVhd);
+            setVmToDelete('');
+            setConfirmationName('');
+            setDeleteVhd(false);
+        }
+    };
 
     const handleVmAction = async (action: string, vmName: string, deleteVhdFiles?: boolean): Promise<void> => {
         setLoading(vmName);
         setError(null);
 
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Aktion hat zu lange gedauert')), VM_ACTION_TIMEOUT);
-        });
-
         try {
-            await Promise.race([
-                fetchData(`qemu/${action}/${vmName}${deleteVhdFiles? '?delete_vhd=true=true' : ''}`, { method: 'POST' }),
-                console.log(action + ' ' + vmName + (deleteVhdFiles? ' with VHD' : '')),
-                timeoutPromise
-            ]);
-            // Minimale Anzeigezeit für Loading bei Stop-Aktion
+            if (action === 'delete') {
+                await api.vm.delete(vmName, deleteVhdFiles);
+            } else {
+                await api.vm[action](vmName);
+            }
+            
             if (action === 'stop') {
                 await new Promise(resolve => setTimeout(resolve, 5000));
             }
@@ -117,28 +82,9 @@ const handleDeleteConfirm = async (): Promise<void> => {
         setError(null);
 
         try {
-            const response = await fetchData('qemu/create', {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            });
-
-            if (response.status === 'error') {
-                throw new Error(response.message);
-            }
-
-            // VM-Liste aktualisieren
-            const vmList = await fetchVmList();
-            // Konvertiere die API-Antwort in das richtige Format
-            const formattedData: VmData = {};
-            Object.entries(vmList).forEach(([name, data]: [string, any]) => {
-                formattedData[name] = {
-                    'state.state': data['state.state'],
-                    'state.reason': data['state.reason'],
-                    'balloon.current': data['balloon.current'],
-                    'vcpu.current': data['vcpu.current']
-                };
-            });
-            setVms(formattedData);
+            await api.vm.create(formData);
+            const vmList = await api.vm.list();
+            setVms(vmList);
         } catch (err: any) {
             setError(`VM konnte nicht erstellt werden: ${err.message}`);
         } finally {
@@ -146,7 +92,6 @@ const handleDeleteConfirm = async (): Promise<void> => {
         }
     };
 
-    // Status Funktionen
     const getStatusColor = (state: string): "success" | "error" => {
         return state === '1' ? 'success' : 'error';
     };
@@ -158,7 +103,6 @@ const handleDeleteConfirm = async (): Promise<void> => {
     const formatMemory = (memoryKB: string): string => {
         return (parseInt(memoryKB) / 1024 / 1024).toFixed(1) + ' GB';
     };
-
 
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
@@ -221,54 +165,10 @@ const handleDeleteConfirm = async (): Promise<void> => {
                                     <Box sx={{ marginLeft: 'auto' }}>
                                         <IconButton
                                             size="small"
-                                            /* disabled={vmData['state.state'] === '1' || loading === vmName}*/
                                             onClick={() => handleDeleteClick(vmName)}
                                         >
                                             <DeleteIcon sx={{ color: 'error.main' }} />
                                         </IconButton>
-                                        <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-                                            <DialogTitle>VM löschen</DialogTitle>
-                                            <DialogContent>
-                                                <Typography variant="body1" sx={{ mb: 2 }}>
-                                                    Um die VM "{vmToDelete}" zu löschen, geben Sie bitte den Namen der VM ein:
-                                                </Typography>
-                                                <TextField
-                                                    fullWidth
-                                                    value={confirmationName}
-                                                    onChange={(e) => setConfirmationName(e.target.value)}
-                                                    error={confirmationName !== '' && confirmationName !== vmToDelete}
-                                                    helperText={confirmationName !== '' && confirmationName !== vmToDelete ?
-                                                        'Name stimmt nicht überein' : ''}
-                                                />
-                                                <FormControlLabel
-                                                    control={
-                                                        <Checkbox
-                                                            checked={deleteVhd}
-                                                            onChange={(e) => setDeleteVhd(e.target.checked)}
-                                                            color="error"
-                                                        />
-                                                    }
-                                                    label={
-                                                        <Typography color="error">
-                                                            Auch die zugehörigen VHD-Dateien (*.cow) löschen
-                                                        </Typography>
-                                                    }
-                                                />
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={() => setDeleteDialogOpen(false)}>
-                                                    Abbrechen
-                                                </Button>
-                                                <Button
-                                                    onClick={handleDeleteConfirm}
-                                                    disabled={confirmationName !== vmToDelete}
-                                                    color="error"
-                                                    variant="contained"
-                                                >
-                                                    Löschen
-                                                </Button>
-                                            </DialogActions>
-                                        </Dialog>
                                     </Box>
                                 </CardActions>
                             </Card>
@@ -276,6 +176,49 @@ const handleDeleteConfirm = async (): Promise<void> => {
                     ))}
                 </Grid>
             )}
+            <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+                <DialogTitle>VM löschen</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                        Um die VM "{vmToDelete}" zu löschen, geben Sie bitte den Namen der VM ein:
+                    </Typography>
+                    <TextField
+                        fullWidth
+                        value={confirmationName}
+                        onChange={(e) => setConfirmationName(e.target.value)}
+                        error={confirmationName !== '' && confirmationName !== vmToDelete}
+                        helperText={confirmationName !== '' && confirmationName !== vmToDelete ?
+                            'Name stimmt nicht überein' : ''}
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={deleteVhd}
+                                onChange={(e) => setDeleteVhd(e.target.checked)}
+                                color="error"
+                            />
+                        }
+                        label={
+                            <Typography color="error">
+                                Auch die zugehörigen VHD-Dateien (*.cow) löschen
+                            </Typography>
+                        }
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteDialogOpen(false)}>
+                        Abbrechen
+                    </Button>
+                    <Button
+                        onClick={handleDeleteConfirm}
+                        disabled={confirmationName !== vmToDelete}
+                        color="error"
+                        variant="contained"
+                    >
+                        Löschen
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }

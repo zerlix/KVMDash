@@ -1,10 +1,8 @@
 import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { fetchData } from '../services/apiService';
+import { api } from '../services/apiService';
 import { DiskData } from '../types/disk.types';
-
-
 
 // convertToGB Funktion
 const convertToGB = (value: string): number => {
@@ -31,15 +29,12 @@ const DiskInfoCard = (): JSX.Element => {
 
     const fetchDiskInfo = async (): Promise<void> => {
         try {
-            const response = await fetchData<DiskData[]>('host/disk');
-            if (response.status === 'success') {
-                setDiskData(response.data);
-            } else {
-                setError(response.message || 'Unbekannter Fehler');
-            }
+            const data = await api.get<DiskData[]>('host/disk');
+            setDiskData(data);
             setLoading(false);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Unbekannter Fehler';
+            setError(message);
             setLoading(false);
         }
     };
@@ -81,7 +76,7 @@ const DiskInfoCard = (): JSX.Element => {
                                                             borderRadius: 4,
                                                             backgroundColor: 'transparent',
                                                             '& .MuiLinearProgress-bar': {
-                                                                backgroundColor: '#00c853' // Grün für den gesamten Speicherplatz
+                                                                backgroundColor: '#00c853'
                                                             }
                                                         }}
                                                     />
@@ -93,7 +88,7 @@ const DiskInfoCard = (): JSX.Element => {
                                                             borderRadius: 4,
                                                             backgroundColor: 'transparent',
                                                             '& .MuiLinearProgress-bar': {
-                                                                backgroundColor: '#ff4444' // Rot für den belegten Speicherplatz
+                                                                backgroundColor: '#ff4444'
                                                             },
                                                             position: 'absolute',
                                                             top: 0,
