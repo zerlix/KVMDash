@@ -1,37 +1,22 @@
 import { useState, useEffect, JSX } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { Box, Card, CardContent, CardHeader, Typography, Chip } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import MemoryIcon from '@mui/icons-material/Memory';
-import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
-
 import { fetchData } from '../services/apiService';
 import { SpiceViewer } from '../components/SpiceViewer';
-
+import { VmGuestInfo } from '../components/VmGuestInfo';
+import { VmMemInfo } from '../components/VmMemInfo';
+import { VmCpuInfo } from '../components/VmCpuInfo';
+import { VmDiskInfo } from '../components/VmDiskInfo';
 
 interface VmDetails {
     name: string;
-    memory: string;
-    vcpu: string;
-    os: {
-        type: string;
-        arch: string;
-    };
     spice: {
         port: string;
         type: string;
         listen: string;
     };
-    network: Array<{
-        name: string;
-        hardware_address: string;
-        ip_addresses: Array<{
-            type: string;
-            address: string;
-        }>;
-    }>;
 }
 
 export default function VmDetailsPage(): JSX.Element {
@@ -66,72 +51,18 @@ export default function VmDetailsPage(): JSX.Element {
     return (
         <Box sx={{ flexGrow: 1, p: 4 }}>
             <Grid container spacing={2}>
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Card elevation={3}>
-                        <CardHeader
-                            title={<Typography variant="h6">System</Typography>}
-                            avatar={<MemoryIcon color="primary" />}
-                        />
-                        <CardContent>
-                            <Typography variant="body2" color="text.secondary">
-                                Architektur: {vmDetails.os.arch} ({vmDetails.os.type})
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                RAM: {(parseInt(vmDetails.memory) / 1024 / 1024).toFixed(1)} GB
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                vCPUs: {vmDetails.vcpu}
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                <Grid size={{ xs: 6 }}>
+                    <VmGuestInfo />
                 </Grid>
-
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Card elevation={3}>
-                        <CardHeader
-                            title={<Typography variant="h6">Netzwerk</Typography>}
-                            avatar={<NetworkCheckIcon color="primary" />}
-                        />
-                        <CardContent>
-                            {vmDetails.network.map((net, index) => (
-                                <Box key={index} sx={{ mb: 2 }}>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {net.name} - MAC: {net.hardware_address}
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-                                        {net.ip_addresses.map((ip, ipIndex) => (
-                                            <Chip
-                                                key={ipIndex}
-                                                label={`${ip.type}: ${ip.address}`}
-                                                size="small"
-                                                color="primary"
-                                                variant="outlined"
-                                            />
-                                        ))}
-                                    </Box>
-                                </Box>
-                            ))}
-                        </CardContent>
-                    </Card>
+                <Grid size={{ xs: 6 }}>
+                    <VmMemInfo />
                 </Grid>
-
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Card elevation={3}>
-                        <CardHeader
-                            title={<Typography variant="h6">SPICE Verbindung</Typography>}
-                            avatar={<DisplaySettingsIcon color="primary" />}
-                        />
-                        <CardContent>
-                            <Typography variant="body2" color="text.secondary">
-                                Port: {vmDetails.spice.port}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Listen Address: {vmDetails.spice.listen}
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                <Grid size={{ xs: 6 }}>
+                    <VmCpuInfo />
                 </Grid>
-
+                <Grid size={{ xs: 6 }}>
+                    <VmDiskInfo />
+                </Grid>
                 <Grid size={{ xs: 12 }}>
                     <Card elevation={3}>
                         <CardHeader
