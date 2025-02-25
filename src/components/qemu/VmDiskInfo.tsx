@@ -1,7 +1,8 @@
+import { JSX } from 'react';
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import StorageIcon from '@mui/icons-material/Storage';
 
-export function VmDiskInfo() {
+export function VmDiskInfo(): JSX.Element  {
     return (
         <Card elevation={3}>
             <CardHeader

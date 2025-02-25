@@ -1,7 +1,8 @@
+import { JSX } from 'react';
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import MemoryIcon from '@mui/icons-material/Memory';
 
-export function VmMemInfo() {
+export function VmMemInfo(): JSX.Element {
     return (
         <Card elevation={3}>
             <CardHeader

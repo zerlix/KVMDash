@@ -1,7 +1,8 @@
+import { JSX } from 'react';
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import DeveloperBoardIcon from '@mui/icons-material/DeveloperBoard';
 
-export function VmCpuInfo() {
+export function VmCpuInfo(): JSX.Element  {
     return (
         <Card elevation={3}>
             <CardHeader

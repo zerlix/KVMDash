@@ -1,7 +1,8 @@
+import { JSX } from 'react';
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 
-export function VmGuestInfo() {
+export function VmGuestInfo(): JSX.Element  {
     return (
         <Card elevation={3}>
             <CardHeader
