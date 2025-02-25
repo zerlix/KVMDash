@@ -11,7 +11,7 @@ export default function HostInfo(): JSX.Element {
 
     // Nur ein useEffect für das Polling
     useEffect(() => {
-        const fetchHostInfo = async () => {
+        const fetchHostInfo = async (): Promise<void> => {
             try {
                 const info = await api.get<SystemInfo>('host/info');
                 setHostInfo(info);
@@ -24,7 +24,7 @@ export default function HostInfo(): JSX.Element {
     
         fetchHostInfo();
         const interval = setInterval(fetchHostInfo, 5000);
-        return () => clearInterval(interval);
+        return (): void => clearInterval(interval);
     }, []);
 
     // Render
