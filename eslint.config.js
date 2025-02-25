@@ -19,5 +19,8 @@ export default [
       '@typescript-eslint/no-unused-vars': 'warn',
       'no-console': 'off'
     }
+  },
+  {
+    ignores: ['src/assets/spice-html5/**'] // Globale ignores
   }
 ];

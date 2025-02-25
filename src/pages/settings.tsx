@@ -14,7 +14,7 @@ const SettingsContent: FC = (): ReactElement => {
     const [uploadStatus, setUploadStatus] = useState<string>('');
     const [downloadProgress, setDownloadProgress] = useState<boolean>(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
         setError('');
 
@@ -56,7 +56,7 @@ const SettingsContent: FC = (): ReactElement => {
             setUploadStatus(response?.message || 'Download läuft...');
             setTimeout(checkDownloadStatus, 2000);
             
-        } catch (err) {
+        } catch {
             // Bei Fehlern weitermachen
             setTimeout(checkDownloadStatus, 2000);
         }
