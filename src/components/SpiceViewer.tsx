@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { JSX, useEffect, useRef } from 'react';
 import { SpiceMainConn } from 'spice-html5/src/main';
 
 interface SpiceViewerProps {
@@ -17,7 +17,7 @@ interface SpiceAgent {
     };
 }
 
-const createSpiceDisplay = (container: HTMLDivElement) => {
+const createSpiceDisplay = (container: HTMLDivElement): HTMLDivElement => {
     const display = document.createElement('div');
     display.id = 'spice-area';
     Object.assign(display.style, {
@@ -32,7 +32,7 @@ const createSpiceDisplay = (container: HTMLDivElement) => {
     return display;
 };
 
-const createMessageDiv = (container: HTMLDivElement) => {
+const createMessageDiv = (container: HTMLDivElement): HTMLDivElement => {
     const messageDiv = document.createElement('div');
     messageDiv.id = 'message-div';
     Object.assign(messageDiv.style, {
@@ -52,7 +52,7 @@ const createMessageDiv = (container: HTMLDivElement) => {
 
 
 
-export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
+export const SpiceViewer = ({ host, port, password }: SpiceViewerProps): JSX.Element => {
     const containerRef = useRef<HTMLDivElement>(null);
     const spiceConnectionRef = useRef<any>(null);
     const renderLoopRef = useRef<number | undefined>(undefined); // Animation Frame Referenz
@@ -81,12 +81,12 @@ export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
                 uri: `ws://${host}:${port}`,
                 screen_id: 'spice-area',
                 password: password,
-                onerror: (e: Event) => {
+                onerror: (e: Event): void  => {
                     if (!isComponentMounted) return;
                     console.error('🔴 SPICE Error:', e);
                     messageDiv.textContent = `Fehler: ${e.type}`;
                 },
-                onsuccess: () => {
+                onsuccess: (): void  => {
                     if (!isComponentMounted) return;
                     console.log('🟢 SPICE Verbindung hergestellt');
                     messageDiv.textContent = 'Verbunden';
@@ -103,7 +103,7 @@ export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
                         }
                     }, 5000); 
                 },
-                onagent: (agent: SpiceAgent) => {
+                onagent: (agent: SpiceAgent) : void  => {
                     if (!isComponentMounted) return;
                     
                     // Erweiterte Debug-Ausgabe
@@ -117,7 +117,7 @@ export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
                 
                     let isConnected = false;
                 
-                    const connectDisplay = () => {
+                    const connectDisplay = (): ((display: HTMLElement) => boolean) => {
                         // Erweiterte Prüfung für verschiedene Display-Server
                         if (typeof agent.connect_display === 'function') {
                             console.log('📺 Verwende direkten connect_display');
@@ -149,7 +149,7 @@ export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
                       return;
                     }
 
-                    const renderLoop = () => {
+                    const renderLoop = (): void => {
                         if (!isComponentMounted) return;
 
                         try {
@@ -183,7 +183,7 @@ export const SpiceViewer = ({ host, port, password }: SpiceViewerProps) => {
         }
 
         // Verbessertes Cleanup
-        return () => {
+        return (): void => {
             isComponentMounted = false; // Verhindert weitere Updates
 
             // Animation Frame stoppen
