@@ -21,7 +21,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import KvmLogo from '../assets/kvmdash.svg';
 
 import { api } from '../services/apiService';
-import type { VmList } from '../services/apiService'; 
+import type { VmList } from '../types/vm.types'; 
 
 const drawerWidth = 240;
 
