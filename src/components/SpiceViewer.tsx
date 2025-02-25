@@ -7,13 +7,13 @@ interface SpiceViewerProps {
     password?: string;
 }
 
-// Zuerst aktualisieren wir die Interface-Definition
+
 interface SpiceAgent {
-    connect_display?: (display: HTMLElement) => boolean;  // Änderung zu boolean
+    connect_display?: (display: HTMLElement) => boolean;  
     main?: {
-        connect_display: (display: HTMLElement) => boolean;  // Änderung zu boolean
+        connect_display: (display: HTMLElement) => boolean;  
         agent?: {
-            connect_display: (display: HTMLElement) => boolean;  // Änderung zu boolean
+            connect_display: (display: HTMLElement) => boolean; 
         }
     };
 }
