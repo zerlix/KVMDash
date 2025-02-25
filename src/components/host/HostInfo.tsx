@@ -1,8 +1,8 @@
 import { Box, Card, CardHeader, Typography, CardContent, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState, JSX } from 'react';
-import { api } from '../services/apiService';
-import { SystemInfo } from '../types/host.types';
+import { api } from '../../services/apiService';
+import { SystemInfo } from '../../types/host.types';
 
 export default function HostInfo(): JSX.Element {
     // State Management

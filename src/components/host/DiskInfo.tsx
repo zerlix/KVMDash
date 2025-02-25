@@ -1,8 +1,8 @@
 import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { api } from '../services/apiService';
-import { DiskData } from '../types/host.types';
+import { api } from '../../services/apiService';
+import { DiskData } from '../../types/host.types';
 
 // convertToGB Funktion
 const convertToGB = (value: string): number => {

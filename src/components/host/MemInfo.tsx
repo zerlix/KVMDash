@@ -1,8 +1,8 @@
 import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { api } from '../services/apiService';
-import { MemData } from '../types/host.types';
+import { api } from '../../services/apiService';
+import { MemData } from '../../types/host.types';
 
 const convertToGB = (value: string): number => {
     const unit = value.slice(-2);

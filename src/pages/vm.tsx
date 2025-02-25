@@ -12,11 +12,11 @@ import StopIcon from '@mui/icons-material/Stop';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { CreateVmForm} from '../components/CreateVmForm';
+import { CreateVmForm} from '../components/qemu/CreateVmForm';
 import type { VmFormData } from '../types/vm.types';
 
 import { api } from '../services/apiService';
-import type { VmList } from '../services/apiService';
+import type { VmList } from '../types/vm.types';
 
 export default function VmContent(): JSX.Element {
     const [vms, setVms] = useState<VmList>({});

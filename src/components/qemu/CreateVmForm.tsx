@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import ComputerIcon from '@mui/icons-material/Computer';
 import Grid from '@mui/material/Grid2';
-import { api } from '../services/apiService';
-import { VmFormData, IsoFile, NetworkOption } from '../types/vm.types';
+import { api } from '../../services/apiService';
+import { VmFormData, IsoFile, NetworkOption } from '../../types/vm.types';
 
 
 interface CreateVmFormProps {

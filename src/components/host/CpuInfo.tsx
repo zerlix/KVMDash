@@ -1,8 +1,8 @@
 import { useState, useEffect, JSX } from "react";
 import { Card, CardContent, CardHeader, Box, Typography, LinearProgress } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { api } from '../services/apiService';
-import { CpuData } from '../types/host.types';
+import { api } from '../../services/apiService';
+import { CpuData } from '../../types/host.types';
 
 const getUsageColor = (usage: number): string => {
     if (usage > 80) return '#ff4444';     // Rot bei hoher Last

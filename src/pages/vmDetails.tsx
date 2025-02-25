@@ -5,10 +5,10 @@ import Grid from '@mui/material/Grid2';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 import { api } from '../services/apiService';
 import { SpiceViewer } from '../components/SpiceViewer';
-import { VmGuestInfo } from '../components/VmGuestInfo';
-import { VmMemInfo } from '../components/VmMemInfo';
-import { VmCpuInfo } from '../components/VmCpuInfo';
-import { VmDiskInfo } from '../components/VmDiskInfo';
+import { VmGuestInfo } from '../components/qemu/VmGuestInfo';
+import { VmMemInfo } from '../components/qemu/VmMemInfo';
+import { VmCpuInfo } from '../components/qemu/VmCpuInfo';
+import { VmDiskInfo } from '../components/qemu/VmDiskInfo';
 
 interface VmDetails {
     name: string;

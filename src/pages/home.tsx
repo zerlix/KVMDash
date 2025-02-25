@@ -1,10 +1,10 @@
 import { JSX  } from 'react';
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import HostInfo from '../components/HostInfo';
-import CpuInfo from '../components/CpuInfo';
-import DiskInfo from '../components/DiskInfo'
-import MemInfo from '../components/MemInfo';
+import HostInfo from '../components/host/HostInfo';
+import CpuInfo from '../components/host/CpuInfo';
+import DiskInfo from '../components/host/DiskInfo'
+import MemInfo from '../components/host/MemInfo';
 
 const gridItemStyle = {
     minHeight: '300px',
