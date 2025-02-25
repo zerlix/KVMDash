@@ -52,7 +52,7 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
     };
 
     useEffect(() => {
-        const loadIsoFiles = async () => {
+        const loadIsoFiles = async (): Promise<void> => {
             try {
                 const data = await api.get<IsoFile[]>('iso/list');
                 setIsoFiles(data);
@@ -69,7 +69,7 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
             }
         };
 
-        const loadNetworkOptions = async () => {
+        const loadNetworkOptions = async (): Promise<void> => {
             try {
                 const data = await api.get<NetworkOption[]>('qemu/network/list');
                 const activeNetworks = data.filter(opt => 
@@ -88,7 +88,7 @@ export const CreateVmForm: React.FC<CreateVmFormProps> = ({ onSubmit }) => {
             }
         };
 
-        const loadOsVariants = async () => {
+        const loadOsVariants = async (): Promise<void> =>  {
             try {
                 const data = await api.get<string[]>('qemu/osinfo/list');
                 setOsVariants(data);
