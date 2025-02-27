@@ -71,7 +71,7 @@ export default function VmDetailsPage(): JSX.Element {
     
                 {/* VM Memory Informationen */}
                 <Grid size={{ xs: 12, md: 6 }}>
-                    {/*<VmMemInfo vmDetails={vmDetails} /> */}
+                    <VmMemInfo vmDetails={vmDetails} />
                 </Grid>
     
                 {/* VM CPU Informationen */}
